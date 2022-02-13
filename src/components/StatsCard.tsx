@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {LogBox, StyleSheet} from 'react-native';
 import {FlatGrid} from 'react-native-super-grid';
-import {AggregateResult, LiveStats} from '../Types';
+import {AggregateResult, LiveStats} from '../types';
 import Card from './Card';
 import StatView from './StatView';
 

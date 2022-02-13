@@ -22,3 +22,16 @@ export type Site = {
   id: string;
   faviconUrl?: string;
 };
+
+export type Period = {
+  period:
+    | '12mo'
+    | '6mo'
+    | 'month'
+    | '30d'
+    | '7d'
+    | 'day'
+    | 'custom'
+    | 'realtime';
+  date?: string;
+};

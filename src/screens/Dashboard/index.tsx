@@ -12,7 +12,12 @@ import {
   getRealtimeVisitors,
   getTimeseries,
 } from '../../requests/stats';
-import {AggregateResult, LiveStats, TimeseriesDataPoint} from '../../Types';
+import {
+  AggregateResult,
+  LiveStats,
+  Period,
+  TimeseriesDataPoint,
+} from '../../types';
 import useInterval from '../../util/useInterval';
 
 type Props = {
@@ -24,7 +29,7 @@ export default function Dashboard({navigation, route}: Props) {
   const {siteId} = route.params;
 
   const [refreshing, setRefreshing] = useState(false);
-  const [period, setPeriod] = useState('30d');
+  const [period, setPeriod] = useState<Period>({period: '30d'});
 
   const [realtimeVisitors, setRealtimeVisitors] = useState<
     number | undefined

@@ -13,7 +13,7 @@ import {
 } from 'victory-native';
 import useColors from '../Colors';
 import useTheme from '../Theme';
-import {TimeseriesDataPoint} from '../Types';
+import {TimeseriesDataPoint} from '../types';
 import {rgba} from 'polished';
 
 type Props = {

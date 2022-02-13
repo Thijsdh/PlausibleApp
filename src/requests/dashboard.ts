@@ -3,7 +3,7 @@
  * when the required functionality is not available in the v1 api.
  */
 
-import {LiveStats, Site} from '../Types';
+import {LiveStats, Site} from '../types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {STORAGE_HOST, STORAGE_PLAUSIBLE_KEY} from './login';
 import {execApiKeyRegex, execCsrfRegex} from '../util/regexes';

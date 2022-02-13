@@ -6,7 +6,7 @@ import {RootStackParamList} from '../../../App';
 import Card from '../../components/Card';
 import Container from '../../components/Container';
 import {getSites} from '../../requests/dashboard';
-import {Site} from '../../Types';
+import {Site} from '../../types';
 
 type Props = {
   navigation: NavigationProp<RootStackParamList>;

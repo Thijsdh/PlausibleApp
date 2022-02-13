@@ -4,6 +4,7 @@ import React, {useRef} from 'react';
 import {ActionSheetIOS, Button, Platform, StyleSheet} from 'react-native';
 
 type Props<T> = {
+  text?: string;
   items: {
     label: string;
     value: T;
@@ -52,7 +53,7 @@ export default function Select<T>(props: Props<T>) {
         ))}
       </Picker>
       <Button
-        title={selectedItem?.label || ''}
+        title={props.text || selectedItem?.label || ''}
         onPress={Platform.OS === 'ios' ? showActionSheet : showPicker}
       />
     </>

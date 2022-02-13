@@ -1,23 +1,32 @@
 import {useTheme} from '@react-navigation/native';
+import dayjs from 'dayjs';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {Period} from '../types';
 import Container from './Container';
+import DateNavigation from './DateNavigation';
 import Select from './Select';
 
-const PERIODS = [
-  {label: 'Today', value: 'day'},
+export type Resolution = 'day' | 'month';
+
+const PERIODS: {
+  label: string;
+  value: Period['period'];
+  resolution?: Resolution;
+}[] = [
+  {label: 'Today', value: 'day', resolution: 'day'},
   {label: 'Realtime', value: 'realtime'},
   {label: 'Last 7 days', value: '7d'},
   {label: 'Last 30 days', value: '30d'},
-  {label: 'Month to date', value: 'month'},
+  {label: 'Month to Date', value: 'month', resolution: 'month'},
   {label: 'Last 6 months', value: '6mo'},
   {label: 'Last 12 months', value: '12mo'},
 ];
 
 type HeaderProps = {
   realtimeVisitors?: number;
-  period: string;
-  setPeriod: (period: string) => void;
+  period: Period;
+  setPeriod: (period: Period) => void;
 };
 
 function VisitorCount({realtimeVisitors}: {realtimeVisitors: number}) {
@@ -37,6 +46,20 @@ export default function HomeHeader({
   period,
   setPeriod,
 }: HeaderProps) {
+  const resolution = PERIODS.find(p => p.value === period.period)?.resolution;
+
+  let selectText: string | undefined;
+  if (period.date) {
+    const day = dayjs(period.date);
+    if (resolution === 'day' && day.isSame(dayjs(), 'day')) {
+      selectText = 'Today';
+    } else if (resolution === 'month' && day.isSame(dayjs(), 'month')) {
+      selectText = 'Month to Date';
+    } else {
+      selectText = day.format(resolution === 'month' ? 'MMMM YYYY' : 'D MMMM');
+    }
+  }
+
   return (
     <Container>
       <View style={styles.header}>
@@ -45,10 +68,18 @@ export default function HomeHeader({
             <VisitorCount realtimeVisitors={realtimeVisitors} />
           ) : null}
         </View>
-        <View>
-          <Select
-            selectedValue={period}
-            onValueChange={itemValue => setPeriod(itemValue)}
+        <View style={styles.headerRight}>
+          {resolution && (
+            <DateNavigation
+              resolution={resolution}
+              date={period.date}
+              setDate={date => setPeriod({...period, date})}
+            />
+          )}
+          <Select<Period['period']>
+            text={selectText}
+            selectedValue={period.period}
+            onValueChange={itemValue => setPeriod({period: itemValue})}
             items={PERIODS}
           />
         </View>
@@ -77,5 +108,9 @@ const styles = StyleSheet.create({
   },
   headerLeft: {
     flexGrow: 1,
+  },
+  headerRight: {
+    display: 'flex',
+    flexDirection: 'row',
   },
 });
