@@ -6,6 +6,7 @@ import {RootStackParamList} from '../../../App';
 import Chart from '../../components/Chart';
 import Container from '../../components/Container';
 import HomeHeader from '../../components/HomeHeader';
+import PagesCard from '../../components/PagesCard';
 import StatsCard from '../../components/StatsCard';
 import {
   getAggregate,
@@ -90,6 +91,7 @@ export default function Dashboard({navigation, route}: Props) {
         <Chart data={timeseries} />
         <Container style={{minHeight: 300}}>
           <StatsCard stats={aggregate} />
+          <PagesCard />
         </Container>
       </ScrollView>
     </SafeAreaView>

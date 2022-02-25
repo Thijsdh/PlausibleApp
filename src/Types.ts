@@ -35,3 +35,8 @@ export type Period = {
     | 'realtime';
   date?: string;
 };
+
+export type PageBreakdownResult = {
+  page: string;
+  visitors: number;
+};
