@@ -43,6 +43,7 @@ export default function Select<T>(props: Props<T>) {
   return (
     <>
       <Picker
+        mode="dropdown"
         ref={pickerRef}
         style={styles.picker}
         itemStyle={{...styles.pickerItem, color: theme.colors.text}}

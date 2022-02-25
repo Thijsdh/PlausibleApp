@@ -25,12 +25,16 @@ export default function Chart({data, interpolation}: Props) {
   const colors = useColors();
   const theme = useTheme();
 
+  let max = Math.ceil(Math.max(...data.map(d => d.visitors || 0)) * 1.5);
+  max = Math.max(1, max);
+
   return (
     <View style={styles.chartContainer}>
       <VictoryChart
         containerComponent={<VictoryVoronoiContainer />}
         domainPadding={{y: [0, 80]}}
         height={250}
+        maxDomain={{y: max}}
         padding={{top: 50, bottom: 0, left: 0, right: 0}}>
         <VictoryArea
           labelComponent={
