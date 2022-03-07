@@ -36,7 +36,28 @@ export type Period = {
   date?: string;
 };
 
-export type PageBreakdownResult = {
+export type Property =
+  | 'event:name'
+  | 'event:page'
+  | 'visit:entry_page'
+  | 'visit:exit_page'
+  | 'visit:source'
+  | 'visit:referrer'
+  | 'visit:utm_medium'
+  | 'visit:utm_source'
+  | 'visit:utm_campaign'
+  | 'visit:utm_content'
+  | 'visit:utm_term'
+  | 'visit:device'
+  | 'visit:browser'
+  | 'visit:browser_version'
+  | 'visit:os'
+  | 'visit:os_version'
+  | 'visit:country';
+
+export type BreakdownType = 'topPages' | 'entryPages' | 'exitPages';
+
+export type BreakdownResult = {
   page: string;
   visitors: number;
 };

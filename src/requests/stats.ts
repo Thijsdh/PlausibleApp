@@ -1,7 +1,9 @@
 import {
   AggregateResult,
+  BreakdownResult,
   LiveStats,
   Period,
+  Property,
   TimeseriesDataPoint,
 } from '../types';
 import {get} from './base';
@@ -62,4 +64,26 @@ export async function getTimeseries(siteId: string, period: Period) {
     }
     return r;
   });
+}
+
+export async function getBreakdown(
+  siteId: string,
+  period: Period,
+  property: Property,
+  limit = 10,
+) {
+  const params = new URLSearchParams({
+    site_id: siteId,
+    period: period.period,
+    property,
+    limit: limit.toString(),
+  });
+  if (period.date) {
+    params.append('date', period.date);
+  }
+
+  const res = await get<{results: BreakdownResult}>(
+    `/api/v1/stats/breakdown?${params.toString()}`,
+  );
+  return res.results;
 }

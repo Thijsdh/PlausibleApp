@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Pressable,
   StyleProp,
@@ -46,9 +46,14 @@ function TabSelector(props: {
   );
 }
 
-export default function TabCard({tabs, title}: {tabs: Tab[]; title?: string}) {
-  const [tabIndex, setTabIndex] = useState(0);
+type Props = {
+  tabs: Tab[];
+  title?: string;
+  tabIndex: number;
+  setTabIndex: (tabIndex: number) => void;
+};
 
+export default function TabCard({tabs, title, tabIndex, setTabIndex}: Props) {
   return (
     <Card>
       <View style={styles.header}>

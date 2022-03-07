@@ -2,9 +2,11 @@ import {applyMiddleware, configureStore, Action} from '@reduxjs/toolkit';
 import {combineReducers} from 'redux';
 import thunkMiddleware, {ThunkAction} from 'redux-thunk';
 
+import dashboard from './store/dashboard';
 import sites from './store/sites';
 
 const reducer = combineReducers({
+  dashboard,
   sites,
 });
 
