@@ -34,6 +34,7 @@ function TabSelector(props: {
     <View style={styles.tabSelector}>
       {props.tabs.map((tab, index) => (
         <Pressable
+          key={tab.title}
           style={styles.tabSelectorItem}
           onPress={() => props.setTabIndex(index)}>
           <Text style={props.tabIndex === index ? activeStyle : {}}>
