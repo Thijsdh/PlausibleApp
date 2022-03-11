@@ -16,6 +16,7 @@ import {
   setPeriod,
   setSiteId,
 } from '../../store/dashboard';
+import SourcesCard from '../../components/SourcesCard';
 
 type Props = {
   navigation: NavigationProp<RootStackParamList>;
@@ -39,7 +40,7 @@ export default function Dashboard({navigation, route}: Props) {
 
   useInterval(async () => {
     dispatch(fetchData());
-  }, 60 * 1000);
+  }, 5 * 60 * 1000);
 
   navigation.addListener('blur', () => dispatch(clearData()));
 
@@ -60,6 +61,7 @@ export default function Dashboard({navigation, route}: Props) {
         <Chart data={timeseries || []} />
         <Container style={{minHeight: 300}}>
           <StatsCard stats={aggregate} />
+          <SourcesCard />
           <PagesCard />
         </Container>
       </ScrollView>

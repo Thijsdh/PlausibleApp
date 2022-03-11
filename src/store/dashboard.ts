@@ -12,6 +12,7 @@ import {
   BreakdownResult,
   Period,
   TimeseriesDataPoint,
+  Property,
 } from '../types';
 
 export type DashboardState = {
@@ -21,9 +22,7 @@ export type DashboardState = {
   realtimeVisitors?: number;
   timeseries?: TimeseriesDataPoint[];
   aggregate?: AggregateResult | LiveStats;
-  topPagesBreakdown?: BreakdownResult[];
-  entryPagesBreakdown?: BreakdownResult[];
-  exitPagesBreakdown?: BreakdownResult[];
+  breakdowns: {[T in Property]?: BreakdownResult[]};
 };
 
 const initialPeriod: Period = {
@@ -33,6 +32,7 @@ const initialPeriod: Period = {
 const initialState: DashboardState = {
   fetching: false,
   period: initialPeriod,
+  breakdowns: {},
 };
 
 export const slice = createSlice({
@@ -63,15 +63,11 @@ export const slice = createSlice({
     },
     setBreakdowns: (
       state,
-      action: PayloadAction<{
-        top: BreakdownResult[];
-        entry: BreakdownResult[];
-        exit: BreakdownResult[];
-      }>,
+      action: PayloadAction<{[T in Property]?: BreakdownResult[]}>,
     ) => {
-      state.topPagesBreakdown = action.payload.top;
-      state.entryPagesBreakdown = action.payload.entry;
-      state.exitPagesBreakdown = action.payload.exit;
+      for (const property of Object.keys(action.payload) as Property[]) {
+        state.breakdowns[property] = action.payload[property];
+      }
     },
   },
 });
@@ -94,7 +90,6 @@ export const setPeriod =
   async dispatch => {
     dispatch(slice.actions.setPeriod(period));
     dispatch(fetchData());
-    dispatch(fetchBreakdowns());
   };
 
 export const fetchData = (): AppThunk => async (dispatch, getState) => {
@@ -111,21 +106,24 @@ export const fetchData = (): AppThunk => async (dispatch, getState) => {
   dispatch(setRealtimeVisitors(realtimeVisitors));
   dispatch(setTimeseries(timeseries));
   dispatch(setAggregate(aggregate));
-  dispatch(fetchBreakdowns());
   dispatch(setFetching(false));
 };
 
-export const fetchBreakdowns = (): AppThunk => async (dispatch, getState) => {
-  const {siteId, period} = getState().dashboard;
-  if (!siteId) {
-    return;
-  }
+export const fetchBreakdowns =
+  (properties: Property[]): AppThunk =>
+  async (dispatch, getState) => {
+    const {siteId, period} = getState().dashboard;
+    if (!siteId) {
+      return;
+    }
 
-  const [top, entry, exit] = await Promise.all([
-    getBreakdown(siteId, period, 'event:page'),
-    getBreakdown(siteId, period, 'visit:entry_page'),
-    getBreakdown(siteId, period, 'visit:exit_page'),
-  ]);
+    const promises = properties.map(prop => getBreakdown(siteId, period, prop));
+    const results = await Promise.all(promises);
 
-  dispatch(setBreakdowns({top, entry, exit}));
-};
+    const breakdowns: {[T in Property]?: BreakdownResult[]} = {};
+    for (let i = 0; i < properties.length; i++) {
+      breakdowns[properties[i]] = results[i];
+    }
+
+    dispatch(setBreakdowns(breakdowns));
+  };

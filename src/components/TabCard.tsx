@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Pressable,
   StyleProp,
@@ -14,6 +14,7 @@ type Tab = {
   headerTitle?: string;
   title: string;
   content: React.ReactNode;
+  onFocus?: () => void;
 };
 
 function TabSelector(props: {
@@ -36,7 +37,10 @@ function TabSelector(props: {
         <Pressable
           key={tab.title}
           style={styles.tabSelectorItem}
-          onPress={() => props.setTabIndex(index)}>
+          onPress={() => {
+            tab.onFocus?.();
+            props.setTabIndex(index);
+          }}>
           <Text style={props.tabIndex === index ? activeStyle : {}}>
             {tab.title}
           </Text>
@@ -49,11 +53,16 @@ function TabSelector(props: {
 type Props = {
   tabs: Tab[];
   title?: string;
-  tabIndex: number;
-  setTabIndex: (tabIndex: number) => void;
 };
 
-export default function TabCard({tabs, title, tabIndex, setTabIndex}: Props) {
+export default function TabCard({tabs, title}: Props) {
+  const [tabIndex, setTabIndex] = useState(0);
+
+  useEffect(() => {
+    tabs[0].onFocus?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <Card>
       <View style={styles.header}>
