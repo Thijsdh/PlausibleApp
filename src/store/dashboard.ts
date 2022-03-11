@@ -1,4 +1,4 @@
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {
   getAggregate,
   getBreakdown,
@@ -12,8 +12,6 @@ import {
   BreakdownResult,
   Period,
   TimeseriesDataPoint,
-  BreakdownType,
-  Property,
 } from '../types';
 
 export type DashboardState = {
@@ -23,10 +21,9 @@ export type DashboardState = {
   realtimeVisitors?: number;
   timeseries?: TimeseriesDataPoint[];
   aggregate?: AggregateResult | LiveStats;
-  pagesBreakdown: {
-    type: BreakdownType;
-    data?: BreakdownResult[];
-  };
+  topPagesBreakdown?: BreakdownResult[];
+  entryPagesBreakdown?: BreakdownResult[];
+  exitPagesBreakdown?: BreakdownResult[];
 };
 
 const initialPeriod: Period = {
@@ -36,9 +33,6 @@ const initialPeriod: Period = {
 const initialState: DashboardState = {
   fetching: false,
   period: initialPeriod,
-  pagesBreakdown: {
-    type: 'topPages',
-  },
 };
 
 export const slice = createSlice({
@@ -67,12 +61,17 @@ export const slice = createSlice({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       state = initialState;
     },
-    setPagesBreakdownType: (state, params) => {
-      state.pagesBreakdown.type = params.payload;
-      state.pagesBreakdown.data = undefined;
-    },
-    setPagesBreakdown: (state, params) => {
-      state.pagesBreakdown.data = params.payload;
+    setBreakdowns: (
+      state,
+      action: PayloadAction<{
+        top: BreakdownResult[];
+        entry: BreakdownResult[];
+        exit: BreakdownResult[];
+      }>,
+    ) => {
+      state.topPagesBreakdown = action.payload.top;
+      state.entryPagesBreakdown = action.payload.entry;
+      state.exitPagesBreakdown = action.payload.exit;
     },
   },
 });
@@ -86,7 +85,7 @@ const {
   setTimeseries,
   setAggregate,
   clearData,
-  setPagesBreakdown,
+  setBreakdowns,
 } = slice.actions;
 export {setSiteId, clearData};
 
@@ -112,25 +111,21 @@ export const fetchData = (): AppThunk => async (dispatch, getState) => {
   dispatch(setRealtimeVisitors(realtimeVisitors));
   dispatch(setTimeseries(timeseries));
   dispatch(setAggregate(aggregate));
+  dispatch(fetchBreakdowns());
   dispatch(setFetching(false));
 };
 
 export const fetchBreakdowns = (): AppThunk => async (dispatch, getState) => {
-  const {siteId, period, pagesBreakdown} = getState().dashboard;
+  const {siteId, period} = getState().dashboard;
   if (!siteId) {
     return;
   }
 
-  const typePropMap: {[B in BreakdownType]: Property} = {
-    topPages: 'event:page',
-    entryPages: 'visit:entry_page',
-    exitPages: 'visit:exit_page',
-  };
+  const [top, entry, exit] = await Promise.all([
+    getBreakdown(siteId, period, 'event:page'),
+    getBreakdown(siteId, period, 'visit:entry_page'),
+    getBreakdown(siteId, period, 'visit:exit_page'),
+  ]);
 
-  const pagesBreakdownData = await getBreakdown(
-    siteId,
-    period,
-    typePropMap[pagesBreakdown.type],
-  );
-  dispatch(setPagesBreakdown(pagesBreakdownData));
+  dispatch(setBreakdowns({top, entry, exit}));
 };

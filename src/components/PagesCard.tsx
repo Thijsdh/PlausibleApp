@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {useAppDispatch, useAppSelector} from '../hooks';
-import {fetchBreakdowns} from '../store/dashboard';
+import React, {useState} from 'react';
+import {useAppSelector} from '../hooks';
 import {BreakdownResult} from '../types';
 import TabCard from './TabCard';
 import Table from './Table';
@@ -11,20 +10,16 @@ function PageTable({data}: {data: BreakdownResult[]}) {
   return (
     <Table
       headerText={{key: 'Page', value: 'Visitors'}}
-      data={data.map(d => ({key: d.page, value: d.visitors}))}
+      data={data.map(d => ({key: d.property, value: d.visitors}))}
     />
   );
 }
 
 export default function PagesCard({}: Props) {
-  const dispatch = useAppDispatch();
-  const {pagesBreakdown} = useAppSelector(selector => selector.dashboard);
+  const {topPagesBreakdown, entryPagesBreakdown, exitPagesBreakdown} =
+    useAppSelector(selector => selector.dashboard);
 
   const [tabIndex, setTabIndex] = useState(0);
-
-  useEffect(() => {
-    dispatch(fetchBreakdowns());
-  }, [dispatch, tabIndex]);
 
   return (
     <TabCard
@@ -34,10 +29,18 @@ export default function PagesCard({}: Props) {
         {
           title: 'Top Pages',
           headerTitle: 'Top Pages',
-          content: <PageTable data={pagesBreakdown.data || []} />,
+          content: <PageTable data={topPagesBreakdown || []} />,
         },
-        {title: 'Entry Pages', headerTitle: 'Entry Pages', content: <></>},
-        {title: 'Exit Pages', headerTitle: 'Exit Pages', content: <></>},
+        {
+          title: 'Entry Pages',
+          headerTitle: 'Entry Pages',
+          content: <PageTable data={entryPagesBreakdown || []} />,
+        },
+        {
+          title: 'Exit Pages',
+          headerTitle: 'Exit Pages',
+          content: <PageTable data={exitPagesBreakdown || []} />,
+        },
       ]}
     />
   );

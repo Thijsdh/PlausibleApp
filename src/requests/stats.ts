@@ -71,7 +71,7 @@ export async function getBreakdown(
   period: Period,
   property: Property,
   limit = 10,
-) {
+): Promise<BreakdownResult[]> {
   const params = new URLSearchParams({
     site_id: siteId,
     period: period.period,
@@ -82,8 +82,14 @@ export async function getBreakdown(
     params.append('date', period.date);
   }
 
-  const res = await get<{results: BreakdownResult}>(
+  const res = await get<{results: any[]}>(
     `/api/v1/stats/breakdown?${params.toString()}`,
   );
-  return res.results;
+
+  const key = property.startsWith('visit:') ? property.substring(6) : 'page';
+
+  return res.results.map(result => ({
+    property: result[key],
+    visitors: result.visitors,
+  }));
 }

@@ -55,9 +55,7 @@ export type Property =
   | 'visit:os_version'
   | 'visit:country';
 
-export type BreakdownType = 'topPages' | 'entryPages' | 'exitPages';
-
 export type BreakdownResult = {
-  page: string;
+  property: string;
   visitors: number;
 };
