@@ -17,20 +17,18 @@ jobs:
       - name: Install yarn dependencies
         run: |
           yarn install
-      - name: Build bundle
-        run: |
-          yarn react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res/
       - name: Build Android
         env:
-          KEYSTORE_ALIAS: ${{ secrets.STAGING_KEYSTORE_ALIAS }}
-          KEYSTORE_PASSPHRASE: ${{ secrets.STAGING_KEYSTORE_PASSPHRASE }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           export VERSION_CODE=${{ github.run_number }}
           export VERSION_NAME=0.1.${{ github.run_number }}
-          echo ${{ secrets.STAGING_KEYSTORE }} | base64 --decode > android/app/staging.keystore
-          cd android && ./gradlew -PversCode=$VERSION_CODE -PversName=$VERSION_NAME :app:assembleStaging
+          echo ${{ secrets.KEYSTORE }} | base64 --decode > android/app/production.keystore
+          cd android && ./gradlew -PversCode=$VERSION_CODE -PversName=$VERSION_NAME :app:assembleRelease
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: artifact
-          path: android/app/build/outputs/apk/staging/app-staging.apk
+          path: android/app/build/outputs/apk/staging/app-production.apk
