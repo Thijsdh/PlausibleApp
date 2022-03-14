@@ -1,6 +1,5 @@
-import React, {useEffect} from 'react';
-import {LogBox, StyleSheet} from 'react-native';
-import {FlatGrid} from 'react-native-super-grid';
+import React from 'react';
+import {StyleSheet} from 'react-native';
 import {AggregateResult, LiveStats} from '../types';
 import Card from './Card';
 import StatView from './StatView';
@@ -10,14 +9,7 @@ type Props = {
 };
 
 export default function StatsCard({stats}: Props) {
-  // See: https://github.com/saleel/react-native-super-grid/issues/170
-  useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
-
-  if (!stats) {
-    return null;
-  }
+  if (!stats) return null;
 
   let items: {title: string; value?: string}[] = [];
 
@@ -59,18 +51,15 @@ export default function StatsCard({stats}: Props) {
 
   return (
     <Card style={styles.statsCard}>
-      <FlatGrid
-        data={items}
-        renderItem={({item}) =>
-          item.value ? (
-            <StatView
-              title={item.title}
-              value={item.value}
-              style={styles.statView}
-            />
-          ) : null
-        }
-      />
+      {items.map(item =>
+        item.value ? (
+          <StatView
+            title={item.title}
+            value={item.value}
+            style={styles.statView}
+          />
+        ) : null,
+      )}
     </Card>
   );
 }
@@ -78,8 +67,10 @@ export default function StatsCard({stats}: Props) {
 const styles = StyleSheet.create({
   statsCard: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   statView: {
-    paddingHorizontal: 8,
+    padding: 8,
+    width: '50%',
   },
 });
