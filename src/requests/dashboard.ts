@@ -74,8 +74,10 @@ export async function getSites() {
   const regex = /^<a href="\/(.*)">$/gm;
   let match: RegExpExecArray | null;
   while ((match = regex.exec(res)) !== null) {
+    const id = decodeURIComponent(match[1]);
     sites.push({
-      id: decodeURIComponent(match[1]),
+      id,
+      faviconUrl: `https://icons.duckduckgo.com/ip3/${id}.ico`,
     });
   }
 

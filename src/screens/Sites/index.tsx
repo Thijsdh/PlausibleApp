@@ -1,6 +1,6 @@
 import {NavigationProp} from '@react-navigation/native';
 import React, {useEffect} from 'react';
-import {ScrollView, StyleSheet, Text} from 'react-native';
+import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStackParamList} from '../../../App';
 import Card from '../../components/Card';
@@ -30,7 +30,15 @@ export default function Sites({navigation}: Props) {
               onPress={() =>
                 navigation.navigate('Dashboard', {siteId: site.id})
               }>
-              <Text>{site.id}</Text>
+              <View style={styles.cardContent}>
+                {site.faviconUrl && (
+                  <Image
+                    source={{uri: site.faviconUrl}}
+                    style={styles.favicon}
+                  />
+                )}
+                <Text>{site.id}</Text>
+              </View>
             </Card>
           ))}
         </Container>
@@ -42,5 +50,15 @@ export default function Sites({navigation}: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  cardContent: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  favicon: {
+    width: 16,
+    height: 16,
+    marginRight: 8,
   },
 });

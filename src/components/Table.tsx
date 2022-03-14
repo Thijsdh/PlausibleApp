@@ -26,7 +26,7 @@ export default function Table({headerText, data}: Props) {
         <Text style={styles.headerText}>{headerText.value}</Text>
       </View>
       {data.map(row => (
-        <View style={styles.row}>
+        <View style={styles.row} key={row.key}>
           <View style={styles.keyContainer}>
             <Text style={styles.key}>{row.key}</Text>
             <View
