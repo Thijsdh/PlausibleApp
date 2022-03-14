@@ -1,5 +1,6 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text} from 'react-native';
+import useTheme from '../Theme';
 
 type Props = {
   children?: React.ReactNode;
@@ -9,8 +10,10 @@ type Props = {
 };
 
 export default function CustomButton(props: Props) {
+  const theme = useTheme();
   return (
     <Pressable
+      android_ripple={{color: theme.colors.primary}}
       style={styles.button}
       onPress={props.onPress}
       disabled={props.disabled}>

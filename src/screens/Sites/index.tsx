@@ -5,7 +5,9 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStackParamList} from '../../../App';
 import Card from '../../components/Card';
 import Container from '../../components/Container';
+import CustomButton from '../../components/CustomButton';
 import {useAppDispatch, useAppSelector} from '../../hooks';
+import {logout} from '../../requests/login';
 import {fetchSites} from '../../store/sites';
 
 type Props = {
@@ -41,6 +43,12 @@ export default function Sites({navigation}: Props) {
               </View>
             </Card>
           ))}
+          <CustomButton
+            title="Logout"
+            onPress={() =>
+              logout().then(() => navigation.reset({routes: [{name: 'Login'}]}))
+            }
+          />
         </Container>
       </ScrollView>
     </SafeAreaView>

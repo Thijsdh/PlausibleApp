@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CookieManager from '@react-native-cookies/cookies';
 import {execCsrfRegex, execPlausibleKeyRegex} from '../util/regexes';
 import {getApiKey} from './dashboard';
 
@@ -79,4 +80,14 @@ export async function isLoggedIn(host?: string | null) {
   });
 
   return res.url.endsWith('/sites');
+}
+
+export async function logout() {
+  // TODO: revoke API key.
+  await AsyncStorage.multiRemove([
+    STORAGE_PLAUSIBLE_KEY,
+    STORAGE_API_KEY,
+    STORAGE_HOST,
+  ]);
+  await CookieManager.clearAll();
 }

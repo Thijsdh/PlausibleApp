@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {Pressable, StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import useTheme from '../Theme';
 
 type Props = {
@@ -13,6 +13,9 @@ export default function Card({children, onPress, style}: Props) {
 
   return (
     <Pressable
+      android_ripple={
+        onPress !== undefined ? {color: theme.colors.primary} : undefined
+      }
       style={[styles.card, style, {backgroundColor: theme.colors.card}]}
       onPress={onPress}>
       {children}

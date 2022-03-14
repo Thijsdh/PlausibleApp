@@ -26,7 +26,7 @@ type Props = {
 export default function Dashboard({navigation, route}: Props) {
   const {siteId} = route.params;
 
-  const {fetching, timeseries, aggregate} = useAppSelector(
+  const {fetching, timeseries, aggregate, period} = useAppSelector(
     state => state.dashboard,
   );
   const dispatch = useAppDispatch();
@@ -61,8 +61,13 @@ export default function Dashboard({navigation, route}: Props) {
         <Chart data={timeseries || []} />
         <Container style={{minHeight: 300}}>
           <StatsCard stats={aggregate} />
-          <SourcesCard />
-          <PagesCard />
+          {/* Disable these cards since they are not implemented in the offical API. */}
+          {period.period !== 'realtime' && (
+            <>
+              <SourcesCard />
+              <PagesCard />
+            </>
+          )}
         </Container>
       </ScrollView>
     </SafeAreaView>
