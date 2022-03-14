@@ -12,6 +12,7 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import useInterval from '../../util/useInterval';
 import {
   clearData,
+  fetchBreakdowns,
   fetchData,
   setPeriod,
   setSiteId,
@@ -33,6 +34,9 @@ export default function Dashboard({navigation, route}: Props) {
   useEffect(() => {
     dispatch(setSiteId(siteId));
     dispatch(fetchData());
+    // Load initial breakdowns
+    dispatch(fetchBreakdowns(['visit:source', 'event:page']));
+
     navigation.setOptions({
       title: siteId,
     });
