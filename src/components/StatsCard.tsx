@@ -54,6 +54,7 @@ export default function StatsCard({stats}: Props) {
       {items.map(item =>
         item.value ? (
           <StatView
+            key={item.title}
             title={item.title}
             value={item.value}
             style={styles.statView}

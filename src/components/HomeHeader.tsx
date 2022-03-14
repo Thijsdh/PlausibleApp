@@ -2,6 +2,9 @@ import {useTheme} from '@react-navigation/native';
 import dayjs from 'dayjs';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {useAppSelector} from '../hooks';
+import {setPeriod} from '../store/dashboard';
 import {Period} from '../types';
 import Container from './Container';
 import DateNavigation from './DateNavigation';
@@ -23,12 +26,6 @@ const PERIODS: {
   {label: 'Last 12 months', value: '12mo'},
 ];
 
-type HeaderProps = {
-  realtimeVisitors?: number;
-  period: Period;
-  setPeriod: (period: Period) => void;
-};
-
 function VisitorCount({realtimeVisitors}: {realtimeVisitors: number}) {
   const theme = useTheme();
   return (
@@ -41,11 +38,10 @@ function VisitorCount({realtimeVisitors}: {realtimeVisitors: number}) {
   );
 }
 
-export default function HomeHeader({
-  realtimeVisitors,
-  period,
-  setPeriod,
-}: HeaderProps) {
+export default function HomeHeader() {
+  const dispatch = useDispatch();
+  const {period, realtimeVisitors} = useAppSelector(state => state.dashboard);
+
   const resolution = PERIODS.find(p => p.value === period.period)?.resolution;
 
   let selectText: string | undefined;
@@ -73,13 +69,15 @@ export default function HomeHeader({
             <DateNavigation
               resolution={resolution}
               date={period.date}
-              setDate={date => setPeriod({...period, date})}
+              setDate={date => dispatch(setPeriod({...period, date}))}
             />
           )}
           <Select<Period['period']>
             text={selectText}
             selectedValue={period.period}
-            onValueChange={itemValue => setPeriod({period: itemValue})}
+            onValueChange={itemValue =>
+              dispatch(setPeriod({period: itemValue}))
+            }
             items={PERIODS}
           />
         </View>

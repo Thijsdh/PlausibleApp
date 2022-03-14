@@ -14,7 +14,6 @@ import {
   clearData,
   fetchBreakdowns,
   fetchData,
-  setPeriod,
   setSiteId,
 } from '../../store/dashboard';
 import SourcesCard from '../../components/SourcesCard';
@@ -27,8 +26,9 @@ type Props = {
 export default function Dashboard({navigation, route}: Props) {
   const {siteId} = route.params;
 
-  const {fetching, period, realtimeVisitors, timeseries, aggregate} =
-    useAppSelector(state => state.dashboard);
+  const {fetching, timeseries, aggregate} = useAppSelector(
+    state => state.dashboard,
+  );
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -57,11 +57,7 @@ export default function Dashboard({navigation, route}: Props) {
             onRefresh={() => dispatch(fetchData())}
           />
         }>
-        <HomeHeader
-          realtimeVisitors={realtimeVisitors}
-          period={period}
-          setPeriod={p => dispatch(setPeriod(p))}
-        />
+        <HomeHeader />
         <Chart data={timeseries || []} />
         <Container style={{minHeight: 300}}>
           <StatsCard stats={aggregate} />
