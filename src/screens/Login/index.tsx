@@ -62,6 +62,10 @@ export default function Login({navigation}: Props) {
       fontWeight: 'bold',
       marginVertical: 16,
     },
+    button: {
+      marginTop: 16,
+      marginBottom: 8,
+    },
   });
 
   return (
@@ -97,7 +101,12 @@ export default function Login({navigation}: Props) {
               onChangeText={setPassword}
               secureTextEntry
             />
-            <CustomButton title="Login" onPress={submit} disabled={loading} />
+            <CustomButton
+              title="Login"
+              onPress={submit}
+              disabled={loading}
+              style={styles.button}
+            />
           </Card>
         </Container>
       </ScrollView>

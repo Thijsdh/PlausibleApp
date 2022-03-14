@@ -1,5 +1,5 @@
 import React from 'react';
-import {Pressable, StyleSheet, Text} from 'react-native';
+import {Pressable, StyleProp, StyleSheet, Text, ViewStyle} from 'react-native';
 import useTheme from '../Theme';
 
 type Props = {
@@ -7,6 +7,7 @@ type Props = {
   onPress?: () => void;
   title?: string;
   disabled?: boolean;
+  style?: StyleProp<ViewStyle>;
 };
 
 export default function CustomButton(props: Props) {
@@ -14,7 +15,7 @@ export default function CustomButton(props: Props) {
   return (
     <Pressable
       android_ripple={{color: theme.colors.primary}}
-      style={styles.button}
+      style={[styles.button, props.style]}
       onPress={props.onPress}
       disabled={props.disabled}>
       <Text style={styles.text}>{props.title}</Text>
@@ -27,8 +28,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgb(79, 70, 229)',
     borderRadius: 6,
     padding: 8,
-    marginTop: 16,
-    marginBottom: 8,
   },
   text: {
     fontSize: 16,

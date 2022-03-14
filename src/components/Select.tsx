@@ -1,7 +1,8 @@
 import {Picker} from '@react-native-picker/picker';
 import {useTheme} from '@react-navigation/native';
 import React, {useRef} from 'react';
-import {ActionSheetIOS, Button, Platform, StyleSheet} from 'react-native';
+import {ActionSheetIOS, Platform, StyleSheet} from 'react-native';
+import CustomButton from './CustomButton';
 
 type Props<T> = {
   text?: string;
@@ -53,7 +54,7 @@ export default function Select<T>(props: Props<T>) {
           <Picker.Item key={i.label} {...i} />
         ))}
       </Picker>
-      <Button
+      <CustomButton
         title={props.text || selectedItem?.label || ''}
         onPress={Platform.OS === 'ios' ? showActionSheet : showPicker}
       />
