@@ -10,14 +10,9 @@ import PagesCard from '../../components/PagesCard';
 import StatsCard from '../../components/StatsCard';
 import {useAppDispatch, useAppSelector} from '../../hooks';
 import useInterval from '../../util/useInterval';
-import {
-  clearData,
-  fetchBreakdowns,
-  fetchData,
-  setSiteId,
-} from '../../store/dashboard';
+import {clearData, fetchData, setSiteId} from '../../store/dashboard';
 import SourcesCard from '../../components/SourcesCard';
-import CountriesCard from '../../components/CountriesCard';
+import LocationsCard from '../../components/LocationsCard';
 
 type Props = {
   navigation: NavigationProp<RootStackParamList>;
@@ -35,8 +30,6 @@ export default function Dashboard({navigation, route}: Props) {
   useEffect(() => {
     dispatch(setSiteId(siteId));
     dispatch(fetchData());
-    // Load initial breakdowns
-    dispatch(fetchBreakdowns(['visit:source', 'event:page', 'visit:country']));
 
     navigation.setOptions({
       title: siteId,
@@ -67,7 +60,7 @@ export default function Dashboard({navigation, route}: Props) {
             <>
               <SourcesCard />
               <PagesCard />
-              <CountriesCard />
+              <LocationsCard />
             </>
           )}
         </Container>

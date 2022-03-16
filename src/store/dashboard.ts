@@ -23,6 +23,7 @@ export type DashboardState = {
   timeseries?: TimeseriesDataPoint[];
   aggregate?: AggregateResult | LiveStats;
   breakdowns: {[T in Property]?: BreakdownResult[]};
+  fetchingBreakdowns: Property[];
 };
 
 const initialPeriod: Period = {
@@ -33,6 +34,7 @@ const initialState: DashboardState = {
   fetching: false,
   period: initialPeriod,
   breakdowns: {},
+  fetchingBreakdowns: [],
 };
 
 export const slice = createSlice({
@@ -61,6 +63,14 @@ export const slice = createSlice({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       state = initialState;
     },
+    setFetchingBreakdown: (state, action: PayloadAction<Property>) => {
+      state.fetchingBreakdowns = [...state.fetchingBreakdowns, action.payload];
+    },
+    setFetchedBreakdown: (state, action: PayloadAction<Property>) => {
+      state.fetchingBreakdowns = [
+        ...state.fetchingBreakdowns.filter(b => b !== action.payload),
+      ];
+    },
     setBreakdowns: (
       state,
       action: PayloadAction<{[T in Property]?: BreakdownResult[]}>,
@@ -68,6 +78,9 @@ export const slice = createSlice({
       for (const property of Object.keys(action.payload) as Property[]) {
         state.breakdowns[property] = action.payload[property];
       }
+    },
+    clearBreakdowns: state => {
+      state.breakdowns = {};
     },
   },
 });
@@ -81,7 +94,10 @@ const {
   setTimeseries,
   setAggregate,
   clearData,
+  setFetchingBreakdown,
+  setFetchedBreakdown,
   setBreakdowns,
+  clearBreakdowns,
 } = slice.actions;
 export {setSiteId, clearData};
 
@@ -90,13 +106,13 @@ export const setPeriod =
   async dispatch => {
     dispatch(slice.actions.setPeriod(period));
     dispatch(fetchData());
+    dispatch(clearBreakdowns());
   };
 
 export const fetchData = (): AppThunk => async (dispatch, getState) => {
   const {siteId, period} = getState().dashboard;
-  if (!siteId) {
-    return;
-  }
+  if (!siteId) return;
+
   dispatch(setFetching(true));
   const [realtimeVisitors, timeseries, aggregate] = await Promise.all([
     getRealtimeVisitors(siteId),
@@ -112,9 +128,19 @@ export const fetchData = (): AppThunk => async (dispatch, getState) => {
 export const fetchBreakdowns =
   (properties: Property[]): AppThunk =>
   async (dispatch, getState) => {
-    const {siteId, period} = getState().dashboard;
-    if (!siteId) {
-      return;
+    const {siteId, period, fetchingBreakdowns} = getState().dashboard;
+    if (!siteId) return;
+
+    console.log(properties);
+
+    for (const prop of properties) {
+      const index = fetchingBreakdowns.indexOf(prop);
+      // Do not fetch if we are already fetching this breakdown.
+      if (index !== -1) {
+        properties.splice(index, 1);
+      } else {
+        dispatch(setFetchingBreakdown(prop));
+      }
     }
 
     const promises = properties.map(prop => getBreakdown(siteId, period, prop));
@@ -126,4 +152,5 @@ export const fetchBreakdowns =
     }
 
     dispatch(setBreakdowns(breakdowns));
+    for (const prop of properties) dispatch(setFetchedBreakdown(prop));
   };
