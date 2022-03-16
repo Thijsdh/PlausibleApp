@@ -70,7 +70,7 @@ export async function getBreakdown(
   siteId: string,
   period: Period,
   property: Property,
-  limit = 10,
+  limit = 9,
 ): Promise<BreakdownResult[]> {
   const params = new URLSearchParams({
     site_id: siteId,

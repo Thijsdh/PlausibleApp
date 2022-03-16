@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
   },
   keyContainer: {
     flexGrow: 1,
+    flexShrink: 1,
     position: 'relative',
   },
   key: {
