@@ -17,6 +17,7 @@ import {
   setSiteId,
 } from '../../store/dashboard';
 import SourcesCard from '../../components/SourcesCard';
+import CountriesCard from '../../components/CountriesCard';
 
 type Props = {
   navigation: NavigationProp<RootStackParamList>;
@@ -35,7 +36,7 @@ export default function Dashboard({navigation, route}: Props) {
     dispatch(setSiteId(siteId));
     dispatch(fetchData());
     // Load initial breakdowns
-    dispatch(fetchBreakdowns(['visit:source', 'event:page']));
+    dispatch(fetchBreakdowns(['visit:source', 'event:page', 'visit:country']));
 
     navigation.setOptions({
       title: siteId,
@@ -66,6 +67,7 @@ export default function Dashboard({navigation, route}: Props) {
             <>
               <SourcesCard />
               <PagesCard />
+              <CountriesCard />
             </>
           )}
         </Container>
