@@ -6,11 +6,13 @@ import {
   Property,
   TimeseriesDataPoint,
 } from '../types';
-import {get} from './base';
+import {fetcher} from './base';
 import {getRealtimeAggregate, getRealtimeTimeseries} from './dashboard';
 
 export async function getRealtimeVisitors(siteId: string) {
-  return await get<number>(`/api/v1/stats/realtime/visitors?site_id=${siteId}`);
+  return await fetcher<number>(
+    `/api/v1/stats/realtime/visitors?site_id=${siteId}`,
+  );
 }
 
 export async function getAggregate(
@@ -32,7 +34,7 @@ export async function getAggregate(
     params.append('date', period.date);
   }
 
-  const res = await get<{results: AggregateResult}>(
+  const res = await fetcher<{results: AggregateResult}>(
     `/api/v1/stats/aggregate?${params.toString()}`,
   );
   return {...res.results, statType: 'aggregate'};
@@ -50,7 +52,7 @@ export async function getTimeseries(siteId: string, period: Period) {
     params.append('date', period.date);
   }
 
-  const res = await get<{results: TimeseriesDataPoint[]}>(
+  const res = await fetcher<{results: TimeseriesDataPoint[]}>(
     `/api/v1/stats/timeseries?${params.toString()}`,
   );
 
@@ -82,7 +84,7 @@ export async function getBreakdown(
     params.append('date', period.date);
   }
 
-  const res = await get<{results: any[]}>(
+  const res = await fetcher<{results: any[]}>(
     `/api/v1/stats/breakdown?${params.toString()}`,
   );
 

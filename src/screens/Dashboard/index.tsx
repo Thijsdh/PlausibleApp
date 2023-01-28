@@ -1,5 +1,5 @@
 import {NavigationProp, Route} from '@react-navigation/native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStackParamList} from '../../../App';
@@ -8,11 +8,13 @@ import Container from '../../components/Container';
 import HomeHeader from '../../components/HomeHeader';
 import PagesCard from '../../components/PagesCard';
 import StatsCard from '../../components/StatsCard';
-import {useAppDispatch, useAppSelector} from '../../hooks';
-import useInterval from '../../util/useInterval';
-import {clearData, fetchData, setSiteId} from '../../store/dashboard';
 import SourcesCard from '../../components/SourcesCard';
 import LocationsCard from '../../components/LocationsCard';
+import useTimeseries from '../../hooks/requests/useTimeseries';
+import useRealtimeTimeseries from '../../hooks/requests/useRealtimeTimeseries';
+import useAggregate from '../../hooks/requests/useAggregate';
+import {Period} from '../../types';
+import useRealtimeAggregate from '../../hooks/requests/useRealtimeAggregate';
 
 type Props = {
   navigation: NavigationProp<RootStackParamList>;
@@ -20,47 +22,79 @@ type Props = {
 };
 
 export default function Dashboard({navigation, route}: Props) {
+  // TODO: use Context for siteId and period
   const {siteId} = route.params;
+  const [period, setPeriod] = useState<Period>({period: '30d'});
 
-  const {fetching, timeseries, aggregate, period} = useAppSelector(
-    state => state.dashboard,
+  const {
+    timeseries,
+    mutate: mutateTimeseries,
+    isLoading: timeseriesLoading,
+  } = useTimeseries(
+    period.period !== 'realtime' ? {siteId, period} : undefined,
   );
-  const dispatch = useAppDispatch();
+  const {
+    timeseries: realtimeTimeseries,
+    mutate: mutateRealtimeTimeseries,
+    isLoading: realtimeTimeseriesLoading,
+  } = useRealtimeTimeseries(
+    period.period === 'realtime' ? {siteId} : undefined,
+  );
+
+  const {
+    aggregate,
+    mutate: mutateAggregate,
+    isLoading: aggregateLoading,
+  } = useAggregate(period.period !== 'realtime' ? {siteId, period} : undefined);
+  const {
+    aggregate: realtimeAggregate,
+    mutate: mutateRealtimeAggregate,
+    isLoading: realtimeAggregateLoading,
+  } = useRealtimeAggregate(period.period === 'realtime' ? siteId : undefined);
+  console.log(realtimeAggregate);
+
+  const loading =
+    timeseriesLoading ||
+    realtimeTimeseriesLoading ||
+    aggregateLoading ||
+    realtimeAggregateLoading;
+  const refresh = () => {
+    mutateTimeseries();
+    mutateRealtimeTimeseries();
+    mutateAggregate();
+    mutateRealtimeAggregate();
+  };
 
   useEffect(() => {
-    dispatch(setSiteId(siteId));
-    dispatch(fetchData());
-
-    navigation.setOptions({
-      title: siteId,
-    });
-  }, [dispatch, navigation, siteId]);
-
-  useInterval(async () => {
-    dispatch(fetchData());
-  }, 5 * 60 * 1000);
-
-  navigation.addListener('blur', () => dispatch(clearData()));
+    navigation.setOptions({title: siteId});
+  }, [navigation, siteId]);
 
   return (
     <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
       <ScrollView
         refreshControl={
-          <RefreshControl
-            refreshing={fetching}
-            onRefresh={() => dispatch(fetchData())}
-          />
+          <RefreshControl refreshing={loading} onRefresh={refresh} />
         }>
-        <HomeHeader />
-        <Chart data={timeseries || []} />
+        <HomeHeader
+          siteId={siteId}
+          period={period}
+          onPeriodChange={setPeriod}
+        />
+        <Chart
+          data={
+            (period.period === 'realtime' ? realtimeTimeseries : timeseries) ??
+            []
+          }
+        />
         <Container style={{minHeight: 300}}>
-          <StatsCard stats={aggregate} />
-          {/* Disable these cards since they are not implemented in the offical API. */}
+          <StatsCard
+            stats={period.period === 'realtime' ? realtimeAggregate : aggregate}
+          />
           {period.period !== 'realtime' && (
             <>
-              <SourcesCard />
-              <PagesCard />
-              <LocationsCard />
+              <SourcesCard siteId={siteId} period={period} />
+              <PagesCard siteId={siteId} period={period} />
+              <LocationsCard siteId={siteId} period={period} />
             </>
           )}
         </Container>

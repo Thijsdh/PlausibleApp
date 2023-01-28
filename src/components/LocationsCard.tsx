@@ -1,23 +1,14 @@
-import React, {useEffect} from 'react';
-import {useAppDispatch, useAppSelector} from '../hooks';
-import {fetchBreakdowns} from '../store/dashboard';
-import {BreakdownResult} from '../types';
+import React from 'react';
+import {BreakdownResult, Period} from '../types';
 import TabCard from './TabCard';
 import Table from './Table';
 import countryList from 'country-list';
+import useBreakdown from '../hooks/requests/useBreakdown';
 
-function CountriesTable() {
-  const dispatch = useAppDispatch();
-  const {breakdowns} = useAppSelector(selector => selector.dashboard);
+function CountriesTable({siteId, period}: {siteId: string; period: Period}) {
+  const {breakdown} = useBreakdown({siteId, property: 'visit:country', period});
 
-  useEffect(() => {
-    if (breakdowns['visit:country'] === undefined)
-      dispatch(fetchBreakdowns(['visit:country']));
-  }, [breakdowns, dispatch]);
-
-  const countries: BreakdownResult[] | undefined = breakdowns[
-    'visit:country'
-  ]?.map(res => ({
+  const countries: BreakdownResult[] | undefined = breakdown?.map(res => ({
     ...res,
     property: `${getCountryFlag(res.property)} ${
       countryList.getName(res.property) || res.property
@@ -37,14 +28,20 @@ function getCountryFlag(country: string) {
   return String.fromCodePoint(...codePoints);
 }
 
-export default function LocationsCard() {
+export default function LocationsCard({
+  siteId,
+  period,
+}: {
+  siteId: string;
+  period: Period;
+}) {
   return (
     <TabCard
       tabs={[
         {
           title: 'Countries',
           headerTitle: 'Countries',
-          content: <CountriesTable />,
+          content: <CountriesTable siteId={siteId} period={period} />,
         },
       ]}
     />

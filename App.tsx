@@ -4,13 +4,13 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import store from './src/store';
-import {Provider} from 'react-redux';
 
 import useTheme from './src/Theme';
 import Login from './src/screens/Login';
 import Sites from './src/screens/Sites';
 import Dashboard from './src/screens/Dashboard';
+import {SWRConfig} from 'swr';
+import {AppState, AppStateStatus} from 'react-native';
 
 export type RootStackParamList = {
   Login: undefined;
@@ -24,7 +24,37 @@ const App = () => {
   const navRef = useNavigationContainerRef<RootStackParamList>();
 
   return (
-    <Provider store={store}>
+    <SWRConfig
+      value={{
+        provider: () => new Map(),
+        isVisible() {
+          return true;
+        },
+        initFocus(callback) {
+          let appState = AppState.currentState;
+
+          const onAppStateChange = (nextAppState: AppStateStatus) => {
+            /* If it's resuming from background or inactive mode to active one */
+            if (
+              appState.match(/inactive|background/) &&
+              nextAppState === 'active'
+            ) {
+              callback();
+            }
+            appState = nextAppState;
+          };
+
+          // Subscribe to the app state change events
+          const subscription = AppState.addEventListener(
+            'change',
+            onAppStateChange,
+          );
+
+          return () => {
+            subscription.remove();
+          };
+        },
+      }}>
       <NavigationContainer theme={theme} ref={navRef}>
         <Stack.Navigator>
           <Stack.Screen name="Login" component={Login} />
@@ -32,7 +62,7 @@ const App = () => {
           <Stack.Screen name="Dashboard" component={Dashboard} />
         </Stack.Navigator>
       </NavigationContainer>
-    </Provider>
+    </SWRConfig>
   );
 };
 

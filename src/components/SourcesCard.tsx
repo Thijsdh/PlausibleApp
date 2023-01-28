@@ -1,48 +1,74 @@
-import React, {useEffect} from 'react';
-import {useAppDispatch, useAppSelector} from '../hooks';
-import {fetchBreakdowns} from '../store/dashboard';
-import {Property} from '../types';
+import React from 'react';
+import useBreakdown from '../hooks/requests/useBreakdown';
+import {Period, Property} from '../types';
 import TabCard from './TabCard';
 import Table from './Table';
 
-function SourcesTable({prop}: {prop: Property}) {
-  const dispatch = useAppDispatch();
-  const {breakdowns} = useAppSelector(selector => selector.dashboard);
-
-  useEffect(() => {
-    if (breakdowns[prop] === undefined) dispatch(fetchBreakdowns([prop]));
-  }, [breakdowns, dispatch, prop]);
+function SourcesTable({
+  prop,
+  siteId,
+  period,
+}: {
+  prop: Property;
+  siteId: string;
+  period: Period;
+}) {
+  const {breakdown} = useBreakdown({siteId, property: prop, period});
 
   return (
     <Table
       headerText={{key: 'Source', value: 'Visitors'}}
-      data={
-        breakdowns[prop]?.map(d => ({key: d.property, value: d.visitors})) || []
-      }
+      data={breakdown?.map(d => ({key: d.property, value: d.visitors})) || []}
     />
   );
 }
 
-export default function SourcesCard() {
+export default function SourcesCard({
+  siteId,
+  period,
+}: {
+  siteId: string;
+  period: Period;
+}) {
   return (
     <TabCard
       title="Top Sources"
       tabs={[
         {
           title: 'All',
-          content: <SourcesTable prop="visit:source" />,
+          content: (
+            <SourcesTable prop="visit:source" siteId={siteId} period={period} />
+          ),
         },
         {
           title: 'Medium',
-          content: <SourcesTable prop="visit:utm_medium" />,
+          content: (
+            <SourcesTable
+              prop="visit:utm_medium"
+              siteId={siteId}
+              period={period}
+            />
+          ),
         },
         {
           title: 'Source',
-          content: <SourcesTable prop="visit:utm_source" />,
+          content: (
+            <SourcesTable
+              prop="visit:utm_source"
+              siteId={siteId}
+              period={period}
+            />
+          ),
         },
         {
           title: 'Campaign',
-          content: <SourcesTable prop="visit:utm_campaign" />,
+          content: (
+            <SourcesTable
+              prop="visit:utm_campaign"
+              siteId={siteId}
+              period={period}
+            />
+          ),
         },
       ]}
     />
