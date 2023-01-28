@@ -51,7 +51,6 @@ export default function Dashboard({navigation, route}: Props) {
     mutate: mutateRealtimeAggregate,
     isLoading: realtimeAggregateLoading,
   } = useRealtimeAggregate(period.period === 'realtime' ? siteId : undefined);
-  console.log(realtimeAggregate);
 
   const loading =
     timeseriesLoading ||
