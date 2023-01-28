@@ -22,7 +22,7 @@
     "react-native": "0.71.1",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-safe-area-context": "^3.3.2",
-    "react-native-screens": "^3.10.1",
+    "react-native-screens": "^3.19.0",
     "react-native-svg": "^12.1.1",
     "swr": "^2.0.2",
     "victory-native": "^36.2.0"
