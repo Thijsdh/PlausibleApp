@@ -1,8 +1,11 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import useTheme from '../Theme';
 import dayjs from 'dayjs';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faChevronLeft} from '@fortawesome/free-solid-svg-icons/faChevronLeft';
+import {faChevronRight} from '@fortawesome/free-solid-svg-icons/faChevronRight';
 
+import useTheme from '../Theme';
 import {Resolution} from './HomeHeader';
 
 type Props = {
@@ -64,7 +67,7 @@ export default function DateNavigation({resolution, date, setDate}: Props) {
   return (
     <View style={styles.container}>
       <Pressable style={[styles.button, styles.buttonLeft]} onPress={goBack}>
-        <Text>&lt;</Text>
+        <FontAwesomeIcon icon={faChevronLeft} />
       </Pressable>
       <Pressable
         style={[
@@ -74,7 +77,7 @@ export default function DateNavigation({resolution, date, setDate}: Props) {
         ]}
         onPress={goForward}
         disabled={forwardDisabled}>
-        <Text>&gt;</Text>
+        <FontAwesomeIcon icon={faChevronRight} />
       </Pressable>
     </View>
   );

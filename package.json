@@ -10,6 +10,9 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@fortawesome/react-native-fontawesome": "^0.3.0",
     "@react-native-async-storage/async-storage": "^1.15.15",
     "@react-native-cookies/cookies": "^6.1.0",
     "@react-native-picker/picker": "^2.2.1",
@@ -23,7 +26,7 @@
     "react-native-linear-gradient": "^2.5.6",
     "react-native-safe-area-context": "^3.3.2",
     "react-native-screens": "^3.19.0",
-    "react-native-svg": "^12.1.1",
+    "react-native-svg": "^12.5.1",
     "swr": "^2.0.2",
     "victory-native": "^36.2.0"
   },
