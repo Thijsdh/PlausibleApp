@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {InterpolationPropType} from 'victory-core';
 import LinearGradient from 'react-native-linear-gradient';
 
@@ -19,9 +19,24 @@ import {rgba} from 'polished';
 type Props = {
   data: TimeseriesDataPoint[];
   interpolation?: InterpolationPropType;
+  height?: number;
+  width?: number;
+  bottomGradient?: boolean;
+  touchable?: boolean;
+  style?: StyleProp<ViewStyle>;
+  showAxis?: boolean;
 };
 
-export default function Chart({data, interpolation}: Props) {
+export default function Chart({
+  data,
+  interpolation,
+  height = 250,
+  width,
+  bottomGradient,
+  touchable,
+  style,
+  showAxis,
+}: Props) {
   const colors = useColors();
   const theme = useTheme();
 
@@ -29,11 +44,14 @@ export default function Chart({data, interpolation}: Props) {
   max = Math.max(1, max);
 
   return (
-    <View style={styles.chartContainer}>
+    <View
+      style={[styles.chartContainer, style]}
+      pointerEvents={touchable ? 'auto' : 'none'}>
       <VictoryChart
         containerComponent={<VictoryVoronoiContainer />}
         domainPadding={{y: [0, 80]}}
-        height={250}
+        height={height}
+        width={width}
         maxDomain={{y: max}}
         padding={{top: 50, bottom: 0, left: 0, right: 0}}>
         <VictoryArea
@@ -54,37 +72,33 @@ export default function Chart({data, interpolation}: Props) {
             },
           }}
         />
-        {/* <VictoryAxis
-        crossAxis
-        tickFormat={(t: string) => new Date(t).toLocaleDateString()}
-        tickCount={3}
-        axisComponent={<></>}
-        tickLabelComponent={<VictoryLabel angle={-45} />}
-      /> */}
-        <VictoryAxis
-          dependentAxis
-          axisComponent={<></>}
-          tickLabelComponent={
-            <VictoryLabel
-              dx={15}
-              dy={-10}
-              textAnchor="start"
-              style={{fill: theme.colors.text, opacity: 0.75}}
-            />
-          }
-          style={{
-            grid: {
-              stroke: 'rgba(0, 0, 0, 0.1)',
-            },
-          }}
-        />
-        {/* <VictoryAxis dependentAxis axisComponent={<></>} /> */}
+        {showAxis && (
+          <VictoryAxis
+            dependentAxis
+            axisComponent={<></>}
+            tickLabelComponent={
+              <VictoryLabel
+                dx={15}
+                dy={-10}
+                textAnchor="start"
+                style={{fill: theme.colors.text, opacity: 0.75}}
+              />
+            }
+            style={{
+              grid: {
+                stroke: 'rgba(0, 0, 0, 0.1)',
+              },
+            }}
+          />
+        )}
         <VictoryAxis crossAxis axisComponent={<></>} />
       </VictoryChart>
-      <LinearGradient
-        colors={[rgba(colors.primary, 0.3), rgba(colors.primary, 0)]}
-        style={styles.bottomGradient}
-      />
+      {bottomGradient && (
+        <LinearGradient
+          colors={[rgba(colors.primary, 0.3), rgba(colors.primary, 0)]}
+          style={styles.bottomGradient}
+        />
+      )}
     </View>
   );
 }

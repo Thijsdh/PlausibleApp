@@ -1,14 +1,21 @@
 import React from 'react';
-import {Pressable, StyleProp, StyleSheet, ViewStyle} from 'react-native';
+import {
+  LayoutChangeEvent,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  ViewStyle,
+} from 'react-native';
 import useTheme from '../Theme';
 
 type Props = {
   children: React.ReactNode;
-  onPress?: () => void;
   style?: StyleProp<ViewStyle>;
+  onPress?: () => void;
+  onLayout?: (event: LayoutChangeEvent) => void;
 };
 
-export default function Card({children, onPress, style}: Props) {
+export default function Card({children, style, onPress, onLayout}: Props) {
   const theme = useTheme();
 
   return (
@@ -17,7 +24,8 @@ export default function Card({children, onPress, style}: Props) {
         onPress !== undefined ? {color: theme.colors.primary} : undefined
       }
       style={[styles.card, style, {backgroundColor: theme.colors.card}]}
-      onPress={onPress}>
+      onPress={onPress}
+      onLayout={onLayout}>
       {children}
     </Pressable>
   );

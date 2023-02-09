@@ -13,6 +13,7 @@ import {RootStackParamList} from '../../../App';
 import Card from '../../components/Card';
 import Container from '../../components/Container';
 import CustomButton from '../../components/CustomButton';
+import SiteCard from '../../components/SiteCard';
 import useSites from '../../hooks/requests/useSites';
 import {logout} from '../../requests/login';
 
@@ -31,21 +32,12 @@ export default function Sites({navigation}: Props) {
             <ActivityIndicator style={styles.activityIndicator} />
           ) : (
             sites?.map(site => (
-              <Card
-                key={site.id}
+              <SiteCard
+                site={site}
                 onPress={() =>
                   navigation.navigate('Dashboard', {siteId: site.id})
-                }>
-                <View style={styles.cardContent}>
-                  {site.faviconUrl && (
-                    <Image
-                      source={{uri: site.faviconUrl}}
-                      style={styles.favicon}
-                    />
-                  )}
-                  <Text>{site.id}</Text>
-                </View>
-              </Card>
+                }
+              />
             ))
           )}
           <CustomButton
@@ -66,15 +58,5 @@ const styles = StyleSheet.create({
   },
   activityIndicator: {
     margin: 16,
-  },
-  cardContent: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  favicon: {
-    width: 16,
-    height: 16,
-    marginRight: 8,
   },
 });

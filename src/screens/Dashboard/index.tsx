@@ -84,6 +84,8 @@ export default function Dashboard({navigation, route}: Props) {
             (period.period === 'realtime' ? realtimeTimeseries : timeseries) ??
             []
           }
+          bottomGradient
+          showAxis
         />
         <Container style={{minHeight: 300}}>
           <StatsCard
