@@ -86,6 +86,7 @@ export default function Dashboard({navigation, route}: Props) {
           }
           bottomGradient
           showAxis
+          touchable
         />
         <Container style={{minHeight: 300}}>
           <StatsCard
