@@ -10,9 +10,11 @@ import Login from './src/screens/Login';
 import Sites from './src/screens/Sites';
 import Dashboard from './src/screens/Dashboard';
 import {SWRConfig} from 'swr';
-import {AppState, AppStateStatus} from 'react-native';
+import {AppState, AppStateStatus, StatusBar} from 'react-native';
+import Loading from './src/screens/Loading';
 
 export type RootStackParamList = {
+  Loading: undefined;
   Login: undefined;
   Sites: undefined;
   Dashboard: {siteId: string};
@@ -55,8 +57,14 @@ const App = () => {
           };
         },
       }}>
+      <StatusBar backgroundColor={theme.colors.background} />
       <NavigationContainer theme={theme} ref={navRef}>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Loading"
+            component={Loading}
+            options={{headerShown: false}}
+          />
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Sites" component={Sites} />
           <Stack.Screen name="Dashboard" component={Dashboard} />

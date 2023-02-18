@@ -33,6 +33,7 @@ export default function Sites({navigation}: Props) {
           ) : (
             sites?.map(site => (
               <SiteCard
+                key={site.id}
                 site={site}
                 onPress={() =>
                   navigation.navigate('Dashboard', {siteId: site.id})

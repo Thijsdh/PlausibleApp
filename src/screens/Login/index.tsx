@@ -40,14 +40,6 @@ export default function Login({navigation}: Props) {
     }
   }
 
-  useEffect(() => {
-    isLoggedIn().then(res => {
-      if (res) {
-        navigation.reset({routes: [{name: 'Sites'}]});
-      }
-    });
-  }, [navigation]);
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
