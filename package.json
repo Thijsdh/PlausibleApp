@@ -39,7 +39,7 @@
     "@types/country-list": "^2.1.0",
     "@types/jest": "^29.2.1",
     "@types/react-test-renderer": "^18.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.7.0",
     "babel-jest": "^29.2.1",
     "eslint": "^8.19.0",
