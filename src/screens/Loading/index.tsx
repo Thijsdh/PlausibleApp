@@ -1,7 +1,8 @@
 import {NavigationProp} from '@react-navigation/native';
 import {useEffect} from 'react';
-import {ActivityIndicator, SafeAreaView, StyleSheet, View} from 'react-native';
-import {RootStackParamList} from '../../../App';
+import {ActivityIndicator, StyleSheet} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {RootStackParamList} from '../../Navigator';
 import {isLoggedIn} from '../../requests/login';
 
 interface Props {

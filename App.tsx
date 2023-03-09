@@ -1,29 +1,13 @@
 import React from 'react';
-import {
-  NavigationContainer,
-  useNavigationContainerRef,
-} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
-import useTheme from './src/Theme';
-import Login from './src/screens/Login';
-import Sites from './src/screens/Sites';
-import Dashboard from './src/screens/Dashboard';
 import {SWRConfig} from 'swr';
 import {AppState, AppStateStatus, StatusBar} from 'react-native';
-import Loading from './src/screens/Loading';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 
-export type RootStackParamList = {
-  Loading: undefined;
-  Login: undefined;
-  Sites: undefined;
-  Dashboard: {siteId: string};
-};
+import useTheme from './src/Theme';
+import Navigator from './src/Navigator';
 
 const App = () => {
   const theme = useTheme();
-  const Stack = createNativeStackNavigator<RootStackParamList>();
-  const navRef = useNavigationContainerRef<RootStackParamList>();
 
   return (
     <SWRConfig
@@ -57,19 +41,10 @@ const App = () => {
           };
         },
       }}>
-      <StatusBar backgroundColor={theme.colors.background} />
-      <NavigationContainer theme={theme} ref={navRef}>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Loading"
-            component={Loading}
-            options={{headerShown: false}}
-          />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Sites" component={Sites} />
-          <Stack.Screen name="Dashboard" component={Dashboard} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <SafeAreaProvider>
+        <StatusBar backgroundColor={theme.colors.background} />
+        <Navigator />
+      </SafeAreaProvider>
     </SWRConfig>
   );
 };
