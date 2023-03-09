@@ -25,6 +25,7 @@ type Props = {
   touchable?: boolean;
   style?: StyleProp<ViewStyle>;
   showAxis?: boolean;
+  onTouchedChanged?: (touched: boolean) => void;
 };
 
 export default function Chart({
@@ -36,8 +37,8 @@ export default function Chart({
   touchable,
   style,
   showAxis,
+  onTouchedChanged,
 }: Props) {
-  const colors = useColors();
   const theme = useTheme();
 
   let max = Math.ceil(Math.max(...data.map(d => d.visitors || 0)) * 1.5);
@@ -50,7 +51,13 @@ export default function Chart({
       {data.length > 0 && (
         <>
           <VictoryChart
-            containerComponent={<VictoryVoronoiContainer />}
+            containerComponent={
+              <VictoryVoronoiContainer
+                voronoiDimension="x"
+                onTouchStart={() => touchable && onTouchedChanged?.(true)}
+                onTouchEnd={() => touchable && onTouchedChanged?.(false)}
+              />
+            }
             domainPadding={{y: [0, 80]}}
             height={height}
             width={width}
@@ -58,7 +65,17 @@ export default function Chart({
             padding={{top: 50, bottom: 0, left: 0, right: 0}}>
             <VictoryArea
               labelComponent={
-                <VictoryTooltip constrainToVisibleArea renderInPortal={false} />
+                <VictoryTooltip
+                  constrainToVisibleArea
+                  renderInPortal={false}
+                  flyoutPadding={{top: 5, left: 10, bottom: 5, right: 10}}
+                  flyoutStyle={{
+                    fill: theme.colors.primary,
+                  }}
+                  style={{
+                    fill: '#fff',
+                  }}
+                />
               }
               labels={({datum}) => `${datum.date}\n${datum.visitors} Visitors`}
               interpolation={interpolation}
@@ -67,9 +84,9 @@ export default function Chart({
               y="visitors"
               style={{
                 data: {
-                  fill: colors.primary,
+                  fill: theme.colors.primary,
                   fillOpacity: 0.3,
-                  stroke: colors.primary,
+                  stroke: theme.colors.primary,
                   strokeWidth: 3,
                 },
               }}
@@ -97,7 +114,10 @@ export default function Chart({
           </VictoryChart>
           {bottomGradient && (
             <LinearGradient
-              colors={[rgba(colors.primary, 0.3), rgba(colors.primary, 0)]}
+              colors={[
+                rgba(theme.colors.primary, 0.3),
+                rgba(theme.colors.primary, 0),
+              ]}
               style={styles.bottomGradient}
             />
           )}

@@ -25,6 +25,7 @@ type Props = {
 export default function Dashboard({navigation, route}: Props) {
   const {siteId} = route.params;
   const [period, setPeriod] = useState<Period>({period: '30d'});
+  const [chartTouched, setChartTouched] = useState(false);
 
   const {
     timeseries,
@@ -74,6 +75,7 @@ export default function Dashboard({navigation, route}: Props) {
         style={styles.container}
         edges={['right', 'bottom', 'left']}>
         <ScrollView
+          scrollEnabled={!chartTouched}
           refreshControl={
             <RefreshControl refreshing={loading} onRefresh={refresh} />
           }>
@@ -87,6 +89,7 @@ export default function Dashboard({navigation, route}: Props) {
             bottomGradient
             showAxis
             touchable
+            onTouchedChanged={setChartTouched}
           />
           <Container style={{minHeight: 300}}>
             <StatsCard
