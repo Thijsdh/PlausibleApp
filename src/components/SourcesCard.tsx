@@ -1,18 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import SiteContext from '../contexts/SiteContext';
 import useBreakdown from '../hooks/requests/useBreakdown';
-import {Period, Property} from '../types';
+import {Property} from '../types';
 import TabCard from './TabCard';
 import Table from './Table';
 
-function SourcesTable({
-  prop,
-  siteId,
-  period,
-}: {
-  prop: Property;
-  siteId: string;
-  period: Period;
-}) {
+function SourcesTable({prop}: {prop: Property}) {
+  const {siteId, period} = useContext(SiteContext);
   const {breakdown} = useBreakdown({siteId, property: prop, period});
 
   return (
@@ -23,52 +17,26 @@ function SourcesTable({
   );
 }
 
-export default function SourcesCard({
-  siteId,
-  period,
-}: {
-  siteId: string;
-  period: Period;
-}) {
+export default function SourcesCard() {
   return (
     <TabCard
       title="Top Sources"
       tabs={[
         {
           title: 'All',
-          content: (
-            <SourcesTable prop="visit:source" siteId={siteId} period={period} />
-          ),
+          content: <SourcesTable prop="visit:source" />,
         },
         {
           title: 'Medium',
-          content: (
-            <SourcesTable
-              prop="visit:utm_medium"
-              siteId={siteId}
-              period={period}
-            />
-          ),
+          content: <SourcesTable prop="visit:utm_medium" />,
         },
         {
           title: 'Source',
-          content: (
-            <SourcesTable
-              prop="visit:utm_source"
-              siteId={siteId}
-              period={period}
-            />
-          ),
+          content: <SourcesTable prop="visit:utm_source" />,
         },
         {
           title: 'Campaign',
-          content: (
-            <SourcesTable
-              prop="visit:utm_campaign"
-              siteId={siteId}
-              period={period}
-            />
-          ),
+          content: <SourcesTable prop="visit:utm_campaign" />,
         },
       ]}
     />

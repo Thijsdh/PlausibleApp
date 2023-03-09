@@ -2,7 +2,7 @@ import {NavigationProp, Route} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {RefreshControl, ScrollView, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {RootStackParamList} from '../../../App';
+import {RootStackParamList} from '../../Navigator';
 import Chart from '../../components/Chart';
 import Container from '../../components/Container';
 import HomeHeader from '../../components/HomeHeader';
@@ -15,6 +15,7 @@ import useRealtimeTimeseries from '../../hooks/requests/useRealtimeTimeseries';
 import useAggregate from '../../hooks/requests/useAggregate';
 import {Period} from '../../types';
 import useRealtimeAggregate from '../../hooks/requests/useRealtimeAggregate';
+import SiteContext from '../../contexts/SiteContext';
 
 type Props = {
   navigation: NavigationProp<RootStackParamList>;
@@ -22,7 +23,6 @@ type Props = {
 };
 
 export default function Dashboard({navigation, route}: Props) {
-  // TODO: use Context for siteId and period
   const {siteId} = route.params;
   const [period, setPeriod] = useState<Period>({period: '30d'});
 
@@ -69,39 +69,42 @@ export default function Dashboard({navigation, route}: Props) {
   }, [navigation, siteId]);
 
   return (
-    <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={refresh} />
-        }>
-        <HomeHeader
-          siteId={siteId}
-          period={period}
-          onPeriodChange={setPeriod}
-        />
-        <Chart
-          data={
-            (period.period === 'realtime' ? realtimeTimeseries : timeseries) ??
-            []
-          }
-          bottomGradient
-          showAxis
-          touchable
-        />
-        <Container style={{minHeight: 300}}>
-          <StatsCard
-            stats={period.period === 'realtime' ? realtimeAggregate : aggregate}
+    <SiteContext.Provider value={{siteId, period, setPeriod}}>
+      <SafeAreaView
+        style={styles.container}
+        edges={['right', 'bottom', 'left']}>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={loading} onRefresh={refresh} />
+          }>
+          <HomeHeader />
+          <Chart
+            data={
+              (period.period === 'realtime'
+                ? realtimeTimeseries
+                : timeseries) ?? []
+            }
+            bottomGradient
+            showAxis
+            touchable
           />
-          {period.period !== 'realtime' && (
-            <>
-              <SourcesCard siteId={siteId} period={period} />
-              <PagesCard siteId={siteId} period={period} />
-              <LocationsCard siteId={siteId} period={period} />
-            </>
-          )}
-        </Container>
-      </ScrollView>
-    </SafeAreaView>
+          <Container style={{minHeight: 300}}>
+            <StatsCard
+              stats={
+                period.period === 'realtime' ? realtimeAggregate : aggregate
+              }
+            />
+            {period.period !== 'realtime' && (
+              <>
+                <SourcesCard />
+                <PagesCard />
+                <LocationsCard />
+              </>
+            )}
+          </Container>
+        </ScrollView>
+      </SafeAreaView>
+    </SiteContext.Provider>
   );
 }
 

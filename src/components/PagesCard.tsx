@@ -1,18 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import SiteContext from '../contexts/SiteContext';
 import useBreakdown from '../hooks/requests/useBreakdown';
-import {Period, Property} from '../types';
+import {Property} from '../types';
 import TabCard from './TabCard';
 import Table from './Table';
 
-function PageTable({
-  prop,
-  siteId,
-  period,
-}: {
-  prop: Property;
-  siteId: string;
-  period: Period;
-}) {
+function PageTable({prop}: {prop: Property}) {
+  const {siteId, period} = useContext(SiteContext);
   const {breakdown} = useBreakdown({siteId, property: prop, period});
 
   return (
@@ -23,40 +17,24 @@ function PageTable({
   );
 }
 
-export default function PagesCard({
-  siteId,
-  period,
-}: {
-  siteId: string;
-  period: Period;
-}) {
+export default function PagesCard() {
   return (
     <TabCard
       tabs={[
         {
           title: 'Top Pages',
           headerTitle: 'Top Pages',
-          content: (
-            <PageTable prop="event:page" siteId={siteId} period={period} />
-          ),
+          content: <PageTable prop="event:page" />,
         },
         {
           title: 'Entry Pages',
           headerTitle: 'Entry Pages',
-          content: (
-            <PageTable
-              prop="visit:entry_page"
-              siteId={siteId}
-              period={period}
-            />
-          ),
+          content: <PageTable prop="visit:entry_page" />,
         },
         {
           title: 'Exit Pages',
           headerTitle: 'Exit Pages',
-          content: (
-            <PageTable prop="visit:exit_page" siteId={siteId} period={period} />
-          ),
+          content: <PageTable prop="visit:exit_page" />,
         },
       ]}
     />

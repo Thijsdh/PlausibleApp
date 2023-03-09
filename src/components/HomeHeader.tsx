@@ -1,7 +1,8 @@
 import {useTheme} from '@react-navigation/native';
 import dayjs from 'dayjs';
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import SiteContext from '../contexts/SiteContext';
 import useRealtimeVisitors from '../hooks/requests/useRealtimeVisitors';
 import {Period} from '../types';
 import Container from './Container';
@@ -36,13 +37,8 @@ function VisitorCount({realtimeVisitors}: {realtimeVisitors: number}) {
   );
 }
 
-interface Props {
-  siteId: string;
-  period: Period;
-  onPeriodChange: (period: Period) => void;
-}
-
-export default function HomeHeader({siteId, period, onPeriodChange}: Props) {
+export default function HomeHeader() {
+  const {siteId, period, setPeriod} = useContext(SiteContext);
   const {visitors: realtimeVisitors} = useRealtimeVisitors(
     period.period === 'realtime' ? siteId : undefined,
   );
@@ -74,13 +70,13 @@ export default function HomeHeader({siteId, period, onPeriodChange}: Props) {
             <DateNavigation
               resolution={resolution}
               date={period.date}
-              setDate={date => onPeriodChange({...period, date})}
+              setDate={date => setPeriod({...period, date})}
             />
           )}
           <Select<Period['period']>
             text={selectText}
             selectedValue={period.period}
-            onValueChange={itemValue => onPeriodChange({period: itemValue})}
+            onValueChange={itemValue => setPeriod({period: itemValue})}
             items={PERIODS}
           />
         </View>
