@@ -13,8 +13,10 @@ interface Props {
 
 export default function Settings({navigation}: Props) {
   return (
-    <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-      <ScrollView style={styles.scrollView}>
+    <ScrollView style={styles.scrollView}>
+      <SafeAreaView
+        style={styles.container}
+        edges={['right', 'bottom', 'left']}>
         <SettingsItem
           icon={faSignOut}
           text="Logout"
@@ -22,8 +24,8 @@ export default function Settings({navigation}: Props) {
             logout().then(() => navigation.reset({routes: [{name: 'Login'}]}))
           }
         />
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
 

@@ -1,13 +1,13 @@
 import {NavigationProp, useTheme} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {RootStackParamList} from '../../../App';
+import {RootStackParamList} from '../../Navigator';
 import Card from '../../components/Card';
 import Container from '../../components/Container';
 import CustomButton from '../../components/CustomButton';
 import TextInputField from '../../components/TextInputField';
-import {isLoggedIn, login} from '../../requests/login';
+import {login} from '../../requests/login';
 
 type Props = {
   navigation: NavigationProp<RootStackParamList>;
@@ -61,8 +61,10 @@ export default function Login({navigation}: Props) {
   });
 
   return (
-    <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-      <ScrollView>
+    <ScrollView>
+      <SafeAreaView
+        style={styles.container}
+        edges={['right', 'bottom', 'left']}>
         <Container>
           <Card>
             <Text style={styles.title}>Enter your email and password</Text>
@@ -101,7 +103,7 @@ export default function Login({navigation}: Props) {
             />
           </Card>
         </Container>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 }

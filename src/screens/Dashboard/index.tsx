@@ -71,14 +71,14 @@ export default function Dashboard({navigation, route}: Props) {
 
   return (
     <SiteContext.Provider value={{siteId, period, setPeriod}}>
-      <SafeAreaView
-        style={styles.container}
-        edges={['right', 'bottom', 'left']}>
-        <ScrollView
-          scrollEnabled={!chartTouched}
-          refreshControl={
-            <RefreshControl refreshing={loading} onRefresh={refresh} />
-          }>
+      <ScrollView
+        scrollEnabled={!chartTouched}
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={refresh} />
+        }>
+        <SafeAreaView
+          style={styles.container}
+          edges={['right', 'bottom', 'left']}>
           <HomeHeader />
           <Chart
             data={
@@ -105,8 +105,8 @@ export default function Dashboard({navigation, route}: Props) {
               </>
             )}
           </Container>
-        </ScrollView>
-      </SafeAreaView>
+        </SafeAreaView>
+      </ScrollView>
     </SiteContext.Provider>
   );
 }

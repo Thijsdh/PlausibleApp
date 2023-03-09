@@ -15,8 +15,10 @@ export default function Sites({navigation}: Props) {
   const {sites, isLoading} = useSites();
 
   return (
-    <SafeAreaView style={styles.container} edges={['right', 'bottom', 'left']}>
-      <ScrollView>
+    <ScrollView>
+      <SafeAreaView
+        style={styles.container}
+        edges={['right', 'bottom', 'left']}>
         <Container>
           {isLoading ? (
             <ActivityIndicator style={styles.activityIndicator} />
@@ -32,8 +34,8 @@ export default function Sites({navigation}: Props) {
             ))
           )}
         </Container>
-      </ScrollView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ScrollView>
   );
 }
 

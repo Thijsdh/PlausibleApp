@@ -42,7 +42,7 @@ const App = () => {
         },
       }}>
       <SafeAreaProvider>
-        <StatusBar backgroundColor={theme.colors.background} />
+        <StatusBar backgroundColor={theme.colors.background} translucent />
         <Navigator />
       </SafeAreaProvider>
     </SWRConfig>
