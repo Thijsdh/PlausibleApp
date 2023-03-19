@@ -61,7 +61,7 @@ export default function Login({navigation}: Props) {
   });
 
   return (
-    <ScrollView>
+    <ScrollView testID="LoginView">
       <SafeAreaView
         style={styles.container}
         edges={['right', 'bottom', 'left']}>
