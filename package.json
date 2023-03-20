@@ -15,7 +15,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.3.0",
     "@fortawesome/free-solid-svg-icons": "^6.3.0",
     "@fortawesome/react-native-fontawesome": "^0.3.0",
-    "@react-native-async-storage/async-storage": "^1.15.15",
+    "@react-native-async-storage/async-storage": "^1.17.12",
     "@react-native-cookies/cookies": "^6.1.0",
     "@react-native-picker/picker": "^2.2.1",
     "@react-navigation/native": "^6.0.6",
