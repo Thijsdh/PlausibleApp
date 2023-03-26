@@ -29,15 +29,24 @@ export async function fetcher<T>(url: string): Promise<T> {
 export async function dashboardFetcher<T = string>(
   url: string,
   json = true,
+  init?: RequestInit,
 ): Promise<T> {
   const host = await AsyncStorage.getItem(STORAGE_HOST);
   const plausibleKey = await AsyncStorage.getItem(STORAGE_PLAUSIBLE_KEY);
 
   const res = await fetch(`${host}${url}`, {
+    ...init,
     headers: {
+      ...init?.headers,
       Cookie: `_plausible_key=${plausibleKey}`,
     },
   });
+
+  if (!res.ok) {
+    throw new Error(
+      `Response is not ok: ${init?.method || 'GET'} ${url}: ${res.status}`,
+    );
+  }
 
   return (json ? await res.json() : await res.text()) as T;
 }

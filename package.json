@@ -9,6 +9,7 @@
     "test": "jest",
     "test:e2e:ios": "detox build --configuration ios.sim.release && detox test --configuration ios.sim.release",
     "test:e2e:android": "detox build --configuration android.emu.release && detox test --configuration android.emu.release",
+    "start-mock-server": "ts-node ./mock-server/index.ts",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
@@ -39,6 +40,7 @@
     "@react-native-community/eslint-config": "^3.2.0",
     "@tsconfig/react-native": "^2.0.3",
     "@types/country-list": "^2.1.0",
+    "@types/express": "^4.17.17",
     "@types/jest": "^29.2.1",
     "@types/react-test-renderer": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.7.0",
@@ -46,9 +48,11 @@
     "babel-jest": "^29.2.1",
     "detox": "^20.5.0",
     "eslint": "^8.19.0",
+    "express": "^4.18.2",
     "jest": "^29.5.0",
     "metro-react-native-babel-preset": "^0.76.0",
     "react-test-renderer": "18.2.0",
+    "ts-node": "^10.9.1",
     "typescript": "^4.9.5"
   },
   "resolutions": {
