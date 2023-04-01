@@ -21,4 +21,8 @@ router.get('/timeseries', (req, res) => {
   res.json(generateTimeseries(req.query as unknown as TimeseriesParams));
 });
 
+router.get('/realtime/visitors', (req, res) => {
+  res.send('21');
+});
+
 export default router;
