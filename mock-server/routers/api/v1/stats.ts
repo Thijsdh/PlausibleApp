@@ -3,6 +3,9 @@ import generateAggregate from '../../../generators/aggregate';
 import generateBreakdown, {
   BreakdownParams,
 } from '../../../generators/breakdown';
+import generateTimeseries, {
+  TimeseriesParams,
+} from '../../../generators/timeseries';
 
 const router = Router();
 
@@ -12,6 +15,10 @@ router.get('/aggregate', (req, res) => {
 
 router.get('/breakdown', (req, res) => {
   res.json(generateBreakdown(req.query as unknown as BreakdownParams));
+});
+
+router.get('/timeseries', (req, res) => {
+  res.json(generateTimeseries(req.query as unknown as TimeseriesParams));
 });
 
 export default router;

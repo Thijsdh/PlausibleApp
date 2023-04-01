@@ -10,7 +10,7 @@ Currently, the following endpoints are supported:
 - `/api/v1/stats/aggregate`
 - `/api/v1/stats/breakdown`
 - `/api/v1/stats/realtime/visitors` _TODO_
-- `/api/v1/stats/timeseries` _TODO_
+- `/api/v1/stats/timeseries` _(With period=30d)_
 
 - `/api/stats/:siteId/main-graph?period=realtime` _TODO_
 - `/api/stats/:siteId/top-stats?period=realtime` _TODO_
