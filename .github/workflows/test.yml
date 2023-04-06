@@ -10,12 +10,9 @@ on:
       - beta
 
 jobs:
-  detox:
-    name: "Detox"
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        api-level: [31]
+  build-android:
+    name: "Build Android APK"
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -32,6 +29,29 @@ jobs:
       
       - name: Gradle cache
         uses: gradle/gradle-build-action@v2
+      
+      - name: Build android
+        run: npm run test:e2e:android:build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-android
+          path: android/app/build/outputs/apk/detoxRelease/app-detoxRelease.apk
+
+  test:
+    name: "Detox tests"
+    needs: build-android
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        api-level: [31]
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: release-android
+          path: android/app/build/outputs/apk/detoxRelease/app-detoxRelease.apk
         
       - name: AVD cache
         uses: actions/cache@v3
@@ -47,6 +67,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          arch: x86_64
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
@@ -56,6 +77,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          arch: x86_64
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
@@ -63,7 +85,7 @@ jobs:
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
-        if: always()
+        if: failure()
         with:
           name: detox-artifacts
           path: e2e/artifacts/
