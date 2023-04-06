@@ -16,13 +16,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install yarn dependencies
-        run: npm install --legacy-peer-deps
+
+      - name: Cache Node modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
       - name: Read package version
         run: |
           echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
           cat ./package.json >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
+
       - name: Build Android
         env:
           VERSION_CODE: ${{ github.run_number }}
@@ -33,6 +43,7 @@ jobs:
         run: |
           echo ${{ secrets.KEYSTORE }} | base64 --decode > android/app/production.keystore
           cd android && ./gradlew -PversCode=$VERSION_CODE -PversName=$VERSION_NAME :app:assembleRelease
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
@@ -48,16 +59,27 @@ jobs:
         with:
           name: release-android
           path: android/app/build/outputs/apk/release/app-release.apk
+
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "lts/*"
+
+      - name: Cache Node modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
