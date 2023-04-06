@@ -33,7 +33,7 @@ module.exports = {
       type: 'android.apk',
       binaryPath: 'android/app/build/outputs/apk/debug/app-debug.apk',
       build:
-        'cd android && ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug',
+        'cd android ; ./gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug ; cd ..',
       reversePorts: [8081],
     },
     'android.release': {
@@ -41,7 +41,7 @@ module.exports = {
       binaryPath:
         'android/app/build/outputs/apk/detoxRelease/app-detoxRelease.apk',
       build:
-        'cd android && ./gradlew assembleDetoxRelease assembleAndroidTest -DtestBuildType=detoxRelease',
+        'cd android ; ./gradlew assembleDetoxRelease assembleAndroidTest -DtestBuildType=detoxRelease ; cd ..',
     },
   },
   devices: {
