@@ -11,10 +11,43 @@ permissions:
   pull-requests: write
 
 jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install yarn dependencies
+        run: npm install --legacy-peer-deps
+      - name: Read package version
+        run: |
+          echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
+          cat ./package.json >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: Build Android
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: ${{ fromJson(env.PACKAGE_JSON).version }}.${{ github.run_number }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          echo ${{ secrets.KEYSTORE }} | base64 --decode > android/app/production.keystore
+          cd android && ./gradlew -PversCode=$VERSION_CODE -PversName=$VERSION_NAME :app:assembleRelease
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: release-android
+          path: android/app/build/outputs/apk/release/app-release.apk
   release:
     name: Release
     runs-on: ubuntu-latest
+    needs: build-android
     steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: release-android
+          path: android/app/build/outputs/apk/release/app-release.apk
       - name: Checkout
         uses: actions/checkout@v3
         with:

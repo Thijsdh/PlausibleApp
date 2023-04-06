@@ -16,6 +16,9 @@
     [
       "@semantic-release/git",
       {
+        "assets": [
+          "android/app/build/outputs/apk/release/app-release.apk"
+        ],
         "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
       }
     ]
