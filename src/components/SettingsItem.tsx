@@ -7,14 +7,16 @@ import useTheme from '../Theme';
 interface Props {
   icon?: IconProp;
   text: string;
+  testID?: string;
   onPress?: () => void;
 }
 
-export default function SettingsItem({icon, text, onPress}: Props) {
+export default function SettingsItem({icon, text, testID, onPress}: Props) {
   const theme = useTheme();
 
   return (
     <Pressable
+      testID={testID}
       style={[styles.container, {backgroundColor: theme.colors.card}]}
       onPress={onPress}>
       <View

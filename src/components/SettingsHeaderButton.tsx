@@ -11,6 +11,7 @@ export default function SettingsHeaderButton({onPress}: Props) {
   const [isPressed, setIsPressed] = useState(false);
   return (
     <Pressable
+      testID="ButtonSettings"
       onPress={onPress}
       onPressIn={() => setIsPressed(true)}
       onPressOut={() => setIsPressed(false)}>

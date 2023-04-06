@@ -12,8 +12,5 @@ Currently, the following endpoints are supported:
 - `/api/v1/stats/realtime/visitors`
 - `/api/v1/stats/timeseries` _(With period=30d)_
 
-- `/api/stats/:siteId/main-graph?period=realtime` _TODO_
-- `/api/stats/:siteId/top-stats?period=realtime` _TODO_
-
 - `/login`
 - `/sites`

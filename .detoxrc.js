@@ -1,5 +1,10 @@
 /** @type {Detox.DetoxConfig} */
 module.exports = {
+  behavior: {
+    init: {
+      exposeGlobals: false,
+    },
+  },
   testRunner: {
     args: {
       $0: 'jest',

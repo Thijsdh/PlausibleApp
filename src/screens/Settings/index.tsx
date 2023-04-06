@@ -13,11 +13,12 @@ interface Props {
 
 export default function Settings({navigation}: Props) {
   return (
-    <ScrollView style={styles.scrollView}>
+    <ScrollView testID="ViewSettings" style={styles.scrollView}>
       <SafeAreaView
         style={styles.container}
         edges={['right', 'bottom', 'left']}>
         <SettingsItem
+          testID="ButtonLogout"
           icon={faSignOut}
           text="Logout"
           onPress={() =>

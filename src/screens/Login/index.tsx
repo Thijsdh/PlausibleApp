@@ -61,7 +61,7 @@ export default function Login({navigation}: Props) {
   });
 
   return (
-    <ScrollView testID="LoginView">
+    <ScrollView testID="ViewLogin">
       <SafeAreaView
         style={styles.container}
         edges={['right', 'bottom', 'left']}>
@@ -69,9 +69,12 @@ export default function Login({navigation}: Props) {
           <Card>
             <Text style={styles.title}>Enter your email and password</Text>
             {error && (
-              <Text style={styles.error}>Login failed. Please try again.</Text>
+              <Text testID="TextLoginFailed" style={styles.error}>
+                Login failed. Please try again.
+              </Text>
             )}
             <TextInputField
+              testID="InputHost"
               label="Plausible Host"
               value={host}
               onChangeText={setHost}
@@ -81,6 +84,7 @@ export default function Login({navigation}: Props) {
               autoCorrect={false}
             />
             <TextInputField
+              testID="InputEmail"
               label="Email"
               value={email}
               onChangeText={setEmail}
@@ -90,12 +94,14 @@ export default function Login({navigation}: Props) {
               autoCorrect={false}
             />
             <TextInputField
+              testID="InputPassword"
               label="Password"
               value={password}
               onChangeText={setPassword}
               secureTextEntry
             />
             <CustomButton
+              testID="ButtonLogin"
               title="Login"
               onPress={submit}
               disabled={loading}

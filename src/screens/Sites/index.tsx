@@ -15,7 +15,7 @@ export default function Sites({navigation}: Props) {
   const {sites, isLoading} = useSites();
 
   return (
-    <ScrollView>
+    <ScrollView testID="ViewSites">
       <SafeAreaView
         style={styles.container}
         edges={['right', 'bottom', 'left']}>
