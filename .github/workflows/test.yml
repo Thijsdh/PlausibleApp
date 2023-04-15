@@ -64,7 +64,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: release-android
-          path: android/app/build/outputs/apk/detoxRelease/app-detoxRelease.apk
+          path: android/app/build/outputs/apk/detoxRelease/
         
       - name: AVD cache
         uses: actions/cache@v3
