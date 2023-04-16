@@ -3,6 +3,11 @@ import {by, device, element, expect, waitFor} from 'detox';
 // Time to wait for the initial view to be visible
 const WAIT_TIME = 5000;
 
+const HOST =
+  device.getPlatform() === 'ios'
+    ? 'http://localhost:3000'
+    : 'http://10.0.2.2:3000';
+
 describe('Authentication', () => {
   beforeAll(async () => {
     await device.launchApp();
@@ -17,7 +22,7 @@ describe('Authentication', () => {
       .toBeVisible()
       .withTimeout(WAIT_TIME);
 
-    await element(by.id('InputHost')).typeText('http://localhost:3000');
+    await element(by.id('InputHost')).typeText(HOST);
     await element(by.id('InputEmail')).typeText('invalid@example.com');
     await element(by.id('InputPassword')).typeText('invalid\n');
 
@@ -31,7 +36,7 @@ describe('Authentication', () => {
       .toBeVisible()
       .withTimeout(WAIT_TIME);
 
-    await element(by.id('InputHost')).typeText('http://localhost:3000');
+    await element(by.id('InputHost')).typeText(HOST);
     await element(by.id('InputEmail')).typeText('user@example.com');
     await element(by.id('InputPassword')).typeText('password\n');
 
@@ -41,7 +46,7 @@ describe('Authentication', () => {
   });
 
   it('should be able to log out', async () => {
-    await waitFor(element(by.id('ViewLogin')))
+    await waitFor(element(by.id('ViewSites')))
       .toBeVisible()
       .withTimeout(WAIT_TIME);
 
