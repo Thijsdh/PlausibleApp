@@ -11,7 +11,6 @@ import {
   VictoryTooltip,
   VictoryVoronoiContainer,
 } from 'victory-native';
-import useColors from '../Colors';
 import useTheme from '../Theme';
 import {TimeseriesDataPoint} from '../types';
 import {rgba} from 'polished';
@@ -72,6 +71,7 @@ export default function Chart({
                   flyoutStyle={{
                     fill: theme.colors.primary,
                   }}
+                  // eslint-disable-next-line react-native/no-inline-styles
                   style={{
                     fill: '#fff',
                   }}
@@ -100,6 +100,7 @@ export default function Chart({
                     dx={15}
                     dy={-10}
                     textAnchor="start"
+                    // eslint-disable-next-line react-native/no-inline-styles
                     style={{fill: theme.colors.text, opacity: 0.75}}
                   />
                 }

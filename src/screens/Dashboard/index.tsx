@@ -91,7 +91,7 @@ export default function Dashboard({navigation, route}: Props) {
             touchable
             onTouchedChanged={setChartTouched}
           />
-          <Container style={{minHeight: 300}}>
+          <Container style={styles.statsContainer}>
             <StatsCard
               stats={
                 period.period === 'realtime' ? realtimeAggregate : aggregate
@@ -114,5 +114,8 @@ export default function Dashboard({navigation, route}: Props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  statsContainer: {
+    minHeight: 300,
   },
 });

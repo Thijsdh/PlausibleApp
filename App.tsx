@@ -1,6 +1,12 @@
 import React from 'react';
 import {SWRConfig} from 'swr';
-import {AppState, AppStateStatus, StatusBar, View} from 'react-native';
+import {
+  AppState,
+  AppStateStatus,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 import useTheme from './src/Theme';
@@ -10,7 +16,7 @@ const App = () => {
   const theme = useTheme();
 
   return (
-    <View style={{flex: 1}} testID="App">
+    <View style={styles.app} testID="App">
       <SWRConfig
         value={{
           provider: () => new Map(),
@@ -50,5 +56,11 @@ const App = () => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  app: {
+    flex: 1,
+  },
+});
 
 export default App;

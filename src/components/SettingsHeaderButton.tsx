@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Button, Pressable} from 'react-native';
+import {Pressable, StyleSheet} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faGear} from '@fortawesome/free-solid-svg-icons/faGear';
 
@@ -18,8 +18,17 @@ export default function SettingsHeaderButton({onPress}: Props) {
       <FontAwesomeIcon
         icon={faGear}
         size={20}
-        style={{opacity: isPressed ? 0.6 : 0.8}}
+        style={[styles.icon, isPressed && styles.iconPressed]}
       />
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  icon: {
+    opacity: 0.8,
+  },
+  iconPressed: {
+    opacity: 0.6,
+  },
+});

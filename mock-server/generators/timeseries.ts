@@ -11,7 +11,7 @@ export default function generateTimeseries({period}: TimeseriesParams) {
   if (!(SUPPORTED_PERIODS as unknown as Period['period'][]).includes(period)) {
     throw new Error(`Unsupported period: ${period}`);
   }
-  const supportedPeriod = period as typeof SUPPORTED_PERIODS[number];
+  const supportedPeriod = period as (typeof SUPPORTED_PERIODS)[number];
 
   const results = [];
 

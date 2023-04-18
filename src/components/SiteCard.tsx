@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {Image, LayoutChangeEvent, StyleSheet, Text, View} from 'react-native';
 import useTimeseries from '../hooks/requests/useTimeseries';
 import {Site} from '../types';
