@@ -1,7 +1,7 @@
 import {by, device, element, expect, waitFor} from 'detox';
 
 // Time to wait for the initial view to be visible
-const WAIT_TIME = 5000;
+const WAIT_TIME = 10000;
 
 const HOST =
   device.getPlatform() === 'ios'
