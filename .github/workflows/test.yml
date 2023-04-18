@@ -1,0 +1,102 @@
+name: Test
+on:
+  push:
+    branches:
+      - main
+      - beta
+  pull_request:
+    branches: 
+      - main
+      - beta
+
+jobs:
+  build-android:
+    name: "Build Android APK"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache Node modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+      
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
+      
+      - name: Build android
+        run: npm run test:e2e:android:build
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-outputs-android
+          path: android/app/build/outputs/apk/
+
+  test:
+    name: "Detox tests"
+    needs: build-android
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        api-level: [29]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache Node modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-outputs-android
+          path: android/app/build/outputs/apk/
+        
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: Run tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: true
+          script: npm run test:e2e:android:run-with-server
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: detox-artifacts
+          path: e2e/artifacts/

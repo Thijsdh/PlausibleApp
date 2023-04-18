@@ -1,6 +1,12 @@
 import {NavigationProp, useTheme} from '@react-navigation/native';
 import React, {useState} from 'react';
-import {ScrollView, StyleSheet, Text} from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStackParamList} from '../../Navigator';
 import Card from '../../components/Card';
@@ -61,55 +67,59 @@ export default function Login({navigation}: Props) {
   });
 
   return (
-    <ScrollView testID="ViewLogin">
-      <SafeAreaView
-        style={styles.container}
-        edges={['right', 'bottom', 'left']}>
-        <Container>
-          <Card>
-            <Text style={styles.title}>Enter your email and password</Text>
-            {error && (
-              <Text testID="TextLoginFailed" style={styles.error}>
-                Login failed. Please try again.
-              </Text>
-            )}
-            <TextInputField
-              testID="InputHost"
-              label="Plausible Host"
-              value={host}
-              onChangeText={setHost}
-              placeholder="https://plausible.io"
-              autoCapitalize="none"
-              keyboardType="url"
-              autoCorrect={false}
-            />
-            <TextInputField
-              testID="InputEmail"
-              label="Email"
-              value={email}
-              onChangeText={setEmail}
-              placeholder="user@example.com"
-              autoCapitalize="none"
-              keyboardType="email-address"
-              autoCorrect={false}
-            />
-            <TextInputField
-              testID="InputPassword"
-              label="Password"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
-            <CustomButton
-              testID="ButtonLogin"
-              title="Login"
-              onPress={submit}
-              disabled={loading}
-              style={styles.button}
-            />
-          </Card>
-        </Container>
-      </SafeAreaView>
-    </ScrollView>
+    <KeyboardAvoidingView
+      testID="ViewLogin"
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView>
+        <SafeAreaView
+          style={styles.container}
+          edges={['right', 'bottom', 'left']}>
+          <Container>
+            <Card>
+              <Text style={styles.title}>Enter your email and password</Text>
+              {error && (
+                <Text testID="TextLoginFailed" style={styles.error}>
+                  Login failed. Please try again.
+                </Text>
+              )}
+              <TextInputField
+                testID="InputHost"
+                label="Plausible Host"
+                value={host}
+                onChangeText={setHost}
+                placeholder="https://plausible.io"
+                autoCapitalize="none"
+                keyboardType="url"
+                autoCorrect={false}
+              />
+              <TextInputField
+                testID="InputEmail"
+                label="Email"
+                value={email}
+                onChangeText={setEmail}
+                placeholder="user@example.com"
+                autoCapitalize="none"
+                keyboardType="email-address"
+                autoCorrect={false}
+              />
+              <TextInputField
+                testID="InputPassword"
+                label="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+              />
+              <CustomButton
+                testID="ButtonLogin"
+                title="Login"
+                onPress={submit}
+                disabled={loading}
+                style={styles.button}
+              />
+            </Card>
+          </Container>
+        </SafeAreaView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

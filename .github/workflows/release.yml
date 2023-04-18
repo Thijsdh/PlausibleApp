@@ -12,6 +12,7 @@ permissions:
 
 jobs:
   build-android:
+    name: "Build Android APK"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -49,6 +50,7 @@ jobs:
         with:
           name: release-android
           path: android/app/build/outputs/apk/release/app-release.apk
+
   release:
     name: Release
     runs-on: ubuntu-latest
