@@ -10,6 +10,27 @@ on:
       - beta
 
 jobs:
+  lint:
+    name: "Lint"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Cache Node modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Lint
+        run: npm run lint
+
   build-android:
     name: "Build Android APK"
     runs-on: ubuntu-latest
@@ -24,7 +45,8 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Install dependencies
+      - if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        name: Install dependencies
         run: npm ci --legacy-peer-deps
       
       - name: Gradle cache
@@ -39,8 +61,8 @@ jobs:
           name: build-outputs-android
           path: android/app/build/outputs/apk/
 
-  test:
-    name: "Detox tests"
+  android-detox-test:
+    name: "Android Detox tests"
     needs: build-android
     runs-on: macos-latest
     strategy:
@@ -57,7 +79,8 @@ jobs:
           path: node_modules
           key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
-      - name: Install dependencies
+      - if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        name: Install dependencies
         run: npm ci --legacy-peer-deps
 
       - name: Download Artifact
