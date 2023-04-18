@@ -11,7 +11,7 @@ app.use(express.json());
 
 app.use('/api/v1/stats', statsRouter);
 app.get('/login', (req, res) => {
-  if (req.headers['cookie']?.includes('_plausible_key=abc123')) {
+  if (req.headers.cookie?.includes('_plausible_key=abc123')) {
     return res.redirect('/sites');
   }
   return res.sendFile(path.join(__dirname, 'static', 'login-static.html'));

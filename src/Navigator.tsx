@@ -3,7 +3,7 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React from 'react';
+import React, {useCallback} from 'react';
 
 import useTheme from './Theme';
 
@@ -27,6 +27,11 @@ export default function Navigator() {
   const Stack = createNativeStackNavigator<RootStackParamList>();
   const navRef = useNavigationContainerRef<RootStackParamList>();
 
+  const SettingsHeaderButtonComponent = useCallback(
+    () => <SettingsHeaderButton onPress={() => navRef.navigate('Settings')} />,
+    [navRef],
+  );
+
   return (
     <NavigationContainer theme={theme} ref={navRef}>
       <Stack.Navigator>
@@ -40,11 +45,7 @@ export default function Navigator() {
           name="Sites"
           component={Sites}
           options={{
-            headerRight: () => (
-              <SettingsHeaderButton
-                onPress={() => navRef.navigate('Settings')}
-              />
-            ),
+            headerRight: SettingsHeaderButtonComponent,
           }}
         />
         <Stack.Screen name="Dashboard" component={Dashboard} />

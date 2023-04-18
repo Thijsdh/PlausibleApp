@@ -1,6 +1,6 @@
 import {NavigationProp} from '@react-navigation/native';
 import React from 'react';
-import {ScrollView, StyleSheet, Text} from 'react-native';
+import {ScrollView, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {faSignOut} from '@fortawesome/free-solid-svg-icons/faSignOut';
 import SettingsItem from '../../components/SettingsItem';

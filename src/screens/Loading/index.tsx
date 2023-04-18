@@ -1,5 +1,5 @@
+import React, {useEffect} from 'react';
 import {NavigationProp} from '@react-navigation/native';
-import {useEffect} from 'react';
 import {ActivityIndicator, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {RootStackParamList} from '../../Navigator';
