@@ -1,5 +1,11 @@
 /** @type {Detox.DetoxConfig} */
 module.exports = {
+  artifacts: {
+    rootDir: 'e2e/artifacts',
+    plugins: {
+      video: 'failing',
+    },
+  },
   behavior: {
     init: {
       exposeGlobals: false,
@@ -12,6 +18,7 @@ module.exports = {
     },
     jest: {
       setupTimeout: 120000,
+      reportSpecs: true,
     },
   },
   apps: {

@@ -8,13 +8,15 @@
     "start": "react-native start",
     "test": "jest",
     "test:e2e:ios:build": "detox build --configuration ios.sim.release",
-    "test:e2e:ios:run": "detox test --configuration ios.sim.release --jest-report-specs --artifacts-location e2e/artifacts/ --record-videos failing",
+    "test:e2e:ios:run": "detox test --configuration ios.sim.release",
     "test:e2e:ios": "npm run test:e2e:ios:build && start-server-and-test start-mock-server http://localhost:3000 test:e2e:ios:run",
     "test:e2e:android:build": "detox build --configuration android.emu.release",
-    "test:e2e:android:run": "detox test --configuration android.emu.release --jest-report-specs --artifacts-location e2e/artifacts/ --record-videos failing",
+    "test:e2e:android:run": "detox test --configuration android.emu.release",
     "test:e2e:android:run-with-server": "start-server-and-test start-mock-server http://localhost:3000 test:e2e:android:run",
     "test:e2e:android": "npm run test:e2e:android:build && npm run test:e2e:android:run-with-server",
     "start-mock-server": "ts-node ./mock-server/index.ts",
+    "take-screenshots": "detox test --config-path ./.detoxrc.screenshots.js --configuration android screenshots/screenshots.spec.ts",
+    "screenshots": "npm run test:e2e:android:build && start-server-and-test start-mock-server http://localhost:3000 take-screenshots",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
