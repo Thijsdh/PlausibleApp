@@ -10,6 +10,7 @@ import PagesCard from '../../components/PagesCard';
 import StatsCard from '../../components/StatsCard';
 import SourcesCard from '../../components/SourcesCard';
 import LocationsCard from '../../components/LocationsCard';
+import DevicesCard from '../../components/DevicesCard';
 import useTimeseries from '../../hooks/requests/useTimeseries';
 import useRealtimeTimeseries from '../../hooks/requests/useRealtimeTimeseries';
 import useAggregate from '../../hooks/requests/useAggregate';
@@ -102,6 +103,7 @@ export default function Dashboard({navigation, route}: Props) {
                 <SourcesCard />
                 <PagesCard />
                 <LocationsCard />
+                <DevicesCard />
               </>
             )}
           </Container>

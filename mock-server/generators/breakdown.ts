@@ -59,6 +59,20 @@ const values: Partial<Record<Property, Record<string, number>>> = {
   'visit:utm_campaign': {
     'Direct / None': 1500,
   },
+  'visit:os': {
+    Windows: 1000,
+    Mac: 500,
+    iOS: 100,
+    Android: 100,
+    'GNU/Linux': 50,
+  },
+  'visit:browser': {
+    Chrome: 1000,
+    Firefox: 500,
+    Safari: 100,
+    'Microsoft Edge': 100,
+    Opera: 50,
+  },
 };
 
 export interface BreakdownParams {
