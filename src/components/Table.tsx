@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import useTheme from '../Theme';
 
-type Props = {
+export interface Props {
   headerText: {
     key: string;
     value: string;
@@ -11,7 +11,7 @@ type Props = {
     key: string;
     value: number;
   }[];
-};
+}
 
 export default function Table({headerText, data}: Props) {
   const theme = useTheme();
