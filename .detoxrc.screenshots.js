@@ -1,7 +1,8 @@
 /** @type {Detox.DetoxConfig} */
 module.exports = {
   artifacts: {
-    rootDir: 'screenshots/artifacts',
+    rootDir: 'screenshots/artifacts/',
+    pathBuilder: './screenshots/artifactPathBuilder.js',
   },
   behavior: {
     init: {

@@ -3,7 +3,11 @@ import {by, device, element, expect, waitFor} from 'detox';
 
 // Time to wait for the initial view to be visible
 const WAIT_TIME = 10000;
-const HOST = 'http://localhost:3000';
+
+const HOST =
+  device.getPlatform() === 'ios'
+    ? 'http://localhost:3000'
+    : 'http://10.0.2.2:3000';
 
 function setDemoMode() {
   if (device.getPlatform() === 'ios') {
@@ -33,7 +37,7 @@ function setDemoMode() {
 }
 beforeAll(setDemoMode);
 
-describe('Authentication', () => {
+describe('Screenshots', () => {
   beforeAll(async () => {
     await device.launchApp();
   });
