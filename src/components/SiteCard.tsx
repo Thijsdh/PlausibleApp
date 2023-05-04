@@ -24,6 +24,7 @@ function SiteCard({site, onPress}: Props) {
 
   return (
     <Card
+      testID="SiteCard"
       key={site.id}
       onPress={onPress}
       style={styles.card}

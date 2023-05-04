@@ -73,6 +73,7 @@ export default function Dashboard({navigation, route}: Props) {
   return (
     <SiteContext.Provider value={{siteId, period, setPeriod}}>
       <ScrollView
+        testID="ViewDashboard"
         scrollEnabled={!chartTouched}
         refreshControl={
           <RefreshControl refreshing={loading} onRefresh={refresh} />
@@ -92,7 +93,7 @@ export default function Dashboard({navigation, route}: Props) {
             touchable
             onTouchedChanged={setChartTouched}
           />
-          <Container style={styles.statsContainer}>
+          <Container style={styles.statsContainer} testID="ViewStatsContainer">
             <StatsCard
               stats={
                 period.period === 'realtime' ? realtimeAggregate : aggregate

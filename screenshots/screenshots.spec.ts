@@ -33,6 +33,10 @@ function setDemoMode() {
     execSync(
       'adb shell am broadcast -a com.android.systemui.demo -e command battery -e plugged false -e level 100',
     );
+    // Hide navigation bar
+    execSync(
+      'adb shell settings put global policy_control immersive.navigation=*',
+    );
   }
 }
 beforeAll(setDemoMode);
@@ -61,5 +65,11 @@ describe('Screenshots', () => {
 
     await expect(element(by.id('ViewSites'))).toBeVisible();
     await device.takeScreenshot('sites');
+
+    await element(by.id('SiteCard')).atIndex(0).tap();
+    await device.takeScreenshot('dashboard-1');
+
+    await element(by.id('ViewDashboard')).scroll(300, 'down', 0.85, NaN);
+    await device.takeScreenshot('dashboard-2');
   });
 });

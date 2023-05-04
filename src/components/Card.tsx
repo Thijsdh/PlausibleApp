@@ -11,15 +11,23 @@ import useTheme from '../Theme';
 type Props = {
   children: React.ReactNode;
   style?: StyleProp<ViewStyle>;
+  testID?: string;
   onPress?: () => void;
   onLayout?: (event: LayoutChangeEvent) => void;
 };
 
-export default function Card({children, style, onPress, onLayout}: Props) {
+export default function Card({
+  children,
+  style,
+  testID,
+  onPress,
+  onLayout,
+}: Props) {
   const theme = useTheme();
 
   return (
     <Pressable
+      testID={testID}
       android_ripple={
         onPress !== undefined ? {color: theme.colors.primary} : undefined
       }
